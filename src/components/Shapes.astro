@@ -1,0 +1,79 @@
+---
+/**
+ * Decorative outline shapes (circles, squares, diagonal lines) used across heroes and CTAs.
+ * Each shape is its own element with data-shape so it can be animated later.
+ * Positions are percentages of the parent; size is in px.
+ */
+export type Shape = {
+  type: 'circle' | 'square' | 'line';
+  top: string;
+  left?: string;
+  right?: string;
+  size: number;
+  angle?: number;
+  /** Hide below 720px so small screens stay clean. */
+  desktop?: boolean;
+};
+
+interface Props {
+  shapes: Shape[];
+  tone?: 'light' | 'dark';
+}
+
+const { shapes, tone = 'light' } = Astro.props;
+---
+
+<div class:list={['shapes', `shapes--${tone}`]} aria-hidden="true">
+  {
+    shapes.map((s) => (
+      <span
+        class:list={['shape', `shape--${s.type}`, { 'shape--desktop': s.desktop }]}
+        data-shape={s.type}
+        style={{
+          top: s.top,
+          left: s.left,
+          right: s.right,
+          width: `${s.size}px`,
+          height: s.type === 'line' ? undefined : `${s.size}px`,
+          transform: s.angle ? `rotate(${s.angle}deg)` : undefined,
+        }}
+      />
+    ))
+  }
+</div>
+
+<style>
+  .shapes {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    overflow: hidden;
+  }
+
+  .shape {
+    position: absolute;
+    display: block;
+    border: 1.5px solid var(--line);
+    opacity: 0.85;
+  }
+
+  .shapes--dark .shape {
+    border-color: #3a3a3a;
+  }
+
+  .shape--circle {
+    border-radius: 50%;
+  }
+
+  .shape--line {
+    height: 0;
+    border-width: 1.5px 0 0;
+    transform-origin: left center;
+  }
+
+  @media (max-width: 720px) {
+    .shape--desktop {
+      display: none;
+    }
+  }
+</style>

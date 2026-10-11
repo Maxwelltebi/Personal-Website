@@ -1,0 +1,93 @@
+---
+/**
+ * Illustrated LC Shuttle route. Static for now; built for animation later:
+ *  - #shuttle-route is the path shuttles travel along
+ *  - [data-shuttle] squares can be moved along that path
+ *  - [data-stop] circles can pulse
+ */
+---
+
+<div class="map">
+  <svg viewBox="0 0 400 370" preserveAspectRatio="xMidYMid slice" role="img" aria-label="Illustrated campus shuttle route with three shuttles and four stops">
+    <rect width="400" height="370" fill="#f2f2f2"></rect>
+
+    <g stroke="#e3e3e3" stroke-width="9" fill="none" data-streets>
+      <path d="M62 0V370M196 0V370M330 0V370"></path>
+      <path d="M0 93H400M0 230H400M0 300H400"></path>
+      <path d="M0 40L400 330"></path>
+    </g>
+
+    <path
+      id="shuttle-route"
+      d="M66 93H200a12 12 0 0 1 12 12V188a12 12 0 0 0 12 12H316a12 12 0 0 1 12 12V300H78a12 12 0 0 1-12-12Z"
+      fill="none"
+      stroke="#111"
+      stroke-width="3.5"
+      stroke-linejoin="round"></path>
+
+    <g fill="#111">
+      <rect data-shuttle="1" x="129" y="86" width="15" height="15"></rect>
+      <rect data-shuttle="2" x="282" y="193" width="15" height="15"></rect>
+      <rect data-shuttle="3" x="59" y="223" width="15" height="15"></rect>
+    </g>
+
+    <g fill="#fff" stroke="#111" stroke-width="3">
+      <circle data-stop cx="66" cy="93" r="7"></circle>
+      <circle data-stop cx="212" cy="146" r="7"></circle>
+      <circle data-stop cx="328" cy="230" r="7"></circle>
+      <circle data-stop cx="174" cy="300" r="7"></circle>
+    </g>
+  </svg>
+
+  <div class="map__status">
+    <div>
+      <p class="map__label">Next shuttle to your stop</p>
+      <p class="map__value">Shuttle 2 · approaching</p>
+    </div>
+    <span class="tag tag--solid map__live" data-live>Live</span>
+  </div>
+</div>
+
+<style>
+  .map {
+    position: relative;
+    height: 100%;
+    min-height: 340px;
+    background: var(--grey);
+  }
+
+  .map svg {
+    display: block;
+    width: 100%;
+    height: 100%;
+  }
+
+  .map__status {
+    position: absolute;
+    left: 16px;
+    right: 16px;
+    bottom: 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    padding: 12px 12px 12px 14px;
+    border: 1px solid var(--black);
+    background: var(--white);
+  }
+
+  .map__label {
+    color: var(--muted);
+    font-size: 10px;
+  }
+
+  .map__value {
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .map__live {
+    padding: 4px 9px;
+    font-size: 9px;
+  }
+</style>

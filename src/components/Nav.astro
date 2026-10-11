@@ -1,0 +1,238 @@
+---
+import { nav, site } from '../data/site';
+import Icon from './Icon.astro';
+
+const path = Astro.url.pathname.replace(/\/$/, '') || '/';
+const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
+---
+
+<header class="nav">
+  <div class="container nav__bar">
+    <a class="nav__brand" href="/">{site.name}</a>
+
+    <nav class="nav__links" aria-label="Main">
+      {
+        nav.map((item) => (
+          <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+
+    <div class="nav__actions">
+      <a class="nav__icon" href={site.github} target="_blank" rel="noopener" aria-label="GitHub">
+        <Icon name="github" />
+      </a>
+      <a class="nav__icon" href={site.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn">
+        <Icon name="linkedin" />
+      </a>
+      <a class="btn btn--solid btn--sm nav__resume" href={site.resume.href} data-resume-open>Résumé</a>
+      <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
+        <span class="nav__toggle-open"><Icon name="menu" size={24} /></span>
+        <span class="nav__toggle-close"><Icon name="close" size={24} /></span>
+      </button>
+    </div>
+  </div>
+
+  <div class="mobile-menu" id="mobile-menu" hidden>
+    <nav class="container mobile-menu__links" aria-label="Main">
+      {
+        nav.map((item) => (
+          <a href={item.href} aria-current={isActive(item.href) ? 'page' : undefined}>
+            {item.label}
+          </a>
+        ))
+      }
+    </nav>
+    <div class="container mobile-menu__foot">
+      <a class="btn btn--solid" href={site.resume.href} data-resume-open>Résumé</a>
+      <a class="nav__icon" href={site.github} target="_blank" rel="noopener" aria-label="GitHub">
+        <Icon name="github" size={20} />
+      </a>
+      <a class="nav__icon" href={site.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn">
+        <Icon name="linkedin" size={20} />
+      </a>
+    </div>
+  </div>
+</header>
+
+<script>
+  const toggle = document.querySelector<HTMLButtonElement>('.nav__toggle');
+  const menu = document.getElementById('mobile-menu');
+
+  const setOpen = (open: boolean) => {
+    if (!toggle || !menu) return;
+    toggle.setAttribute('aria-expanded', String(open));
+    toggle.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+    menu.hidden = !open;
+    document.body.classList.toggle('menu-open', open);
+  };
+
+  toggle?.addEventListener('click', () => setOpen(toggle.getAttribute('aria-expanded') !== 'true'));
+  menu?.addEventListener('click', (e) => {
+    if ((e.target as HTMLElement).closest('a')) setOpen(false);
+  });
+  document.addEventListener('keydown', (e) => {
+    if (e.key === 'Escape') setOpen(false);
+  });
+  window.matchMedia('(min-width: 1025px)').addEventListener('change', (e) => {
+    if (e.matches) setOpen(false);
+  });
+</script>
+
+<style>
+  .nav {
+    position: relative;
+    z-index: 20;
+    background: var(--grey);
+  }
+
+  .nav__bar {
+    display: flex;
+    align-items: center;
+    gap: 32px;
+    min-height: 78px;
+  }
+
+  .nav__brand {
+    font-size: 17px;
+    font-weight: 800;
+    letter-spacing: 0.04em;
+    text-transform: uppercase;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .nav__links {
+    display: flex;
+    gap: 30px;
+    margin-left: auto;
+  }
+
+  .nav__links a {
+    color: var(--muted);
+    font-size: 14px;
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .nav__links a:hover {
+    color: var(--black);
+  }
+
+  .nav__links a[aria-current='page'] {
+    color: var(--black);
+    font-weight: 700;
+  }
+
+  .nav__actions {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+
+  .nav__icon {
+    display: grid;
+    place-items: center;
+    width: 36px;
+    height: 36px;
+    color: var(--black);
+  }
+
+  .nav__icon:hover {
+    opacity: 0.6;
+  }
+
+  .nav__resume {
+    margin-left: 16px;
+    min-height: 44px;
+    padding: 0 26px;
+  }
+
+  .nav__toggle {
+    display: none;
+    place-items: center;
+    width: 44px;
+    height: 44px;
+    border: 0;
+    background: transparent;
+  }
+
+  .nav__toggle-close,
+  .nav__toggle[aria-expanded='true'] .nav__toggle-open {
+    display: none;
+  }
+
+  .nav__toggle[aria-expanded='true'] .nav__toggle-close {
+    display: block;
+  }
+
+  .mobile-menu {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    height: calc(100dvh - 72px);
+    overflow-y: auto;
+    background: var(--grey);
+    border-top: 1px solid var(--border);
+  }
+
+  .mobile-menu__links {
+    display: flex;
+    flex-direction: column;
+    padding-block: 12px;
+  }
+
+  .mobile-menu__links a {
+    padding: 18px 0;
+    border-bottom: 1px solid var(--border);
+    font-size: 26px;
+    font-weight: 800;
+    text-transform: uppercase;
+    text-decoration: none;
+  }
+
+  .mobile-menu__links a[aria-current='page'] {
+    text-decoration: underline;
+    text-underline-offset: 6px;
+    text-decoration-thickness: 2px;
+  }
+
+  .mobile-menu__foot {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding-block: 28px;
+  }
+
+  @media (max-width: 1024px) {
+    .nav__bar {
+      min-height: 72px;
+    }
+
+    .nav__links,
+    .nav__actions > .nav__icon {
+      display: none;
+    }
+
+    .nav__actions {
+      margin-left: auto;
+    }
+
+    .nav__toggle {
+      display: grid;
+    }
+  }
+
+  @media (max-width: 420px) {
+    .nav__resume {
+      display: none;
+    }
+  }
+
+  :global(body.menu-open) {
+    overflow: hidden;
+  }
+</style>

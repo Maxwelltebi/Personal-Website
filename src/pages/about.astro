@@ -1,0 +1,257 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import FactsBar from '../components/FactsBar.astro';
+import { facts, education, experience, toolkit } from '../data/about';
+---
+
+<Base title="About Me">
+  <PageHero
+    title="About me"
+    lead="From Keta, Ghana to Salisbury, North Carolina"
+    body={[
+      "I grew up in Keta, a town on Ghana's coast that the sea has been taking back for decades. That taught me a good question is only worth something if the answer reaches the people living with the problem.",
+      'Today I study Computer Science with a minor in Mathematics at Livingstone College. As a researcher I use machine learning and statistics to find out what is true. As an engineer I turn those findings into software people open.',
+    ]}
+    photo
+    shapes={[
+      { type: 'circle', top: '14%', left: '3.5%', size: 22 },
+      { type: 'line', top: '24%', left: '43.5%', size: 190, angle: -30, desktop: true },
+      { type: 'square', top: '17%', right: '3%', size: 80, desktop: true },
+      { type: 'circle', top: '74%', left: '39.5%', size: 64, desktop: true },
+    ]}
+  />
+
+  <FactsBar facts={facts} />
+
+  <section class="section">
+    <div class="container">
+      <header class="section-head">
+        <div>
+          <h2 class="h-section">Education</h2>
+          <p class="sub">Where I learned, and where I'm learning now.</p>
+        </div>
+      </header>
+
+      <div class="edu">
+        {
+          education.map((e) => (
+            <article class:list={['edu__card', { 'edu__card--current': e.current }]}>
+              <p class="eyebrow edu__meta">{e.meta}</p>
+              <h3 class="edu__school">{e.school}</h3>
+              <p class="edu__degree">{e.degree}</p>
+              {e.badges.length > 0 && (
+                <div class="edu__badges">
+                  {e.badges.map((b) => (
+                    <span class="tag tag--solid edu__badge">{b}</span>
+                  ))}
+                </div>
+              )}
+              <p class="edu__note">{e.note}</p>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section exp-section">
+    <div class="container">
+      <header class="section-head">
+        <div>
+          <h2 class="h-section">Experience</h2>
+          <p class="sub">Research labs and real businesses.</p>
+        </div>
+      </header>
+
+      <ol class="rule-list">
+        {
+          experience.map((x) => (
+            <li class="exp">
+              <div class="exp__when">
+                <p class="exp__date">{x.date}</p>
+                <p class="exp__place">{x.place}</p>
+              </div>
+              <div>
+                <h3 class="exp__role">{x.role}</h3>
+                <p class="exp__org">{x.org}</p>
+                <p class="body exp__body">{x.body}</p>
+              </div>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section bg-grey">
+    <div class="container">
+      <header class="section-head">
+        <div>
+          <h2 class="h-section">Toolkit</h2>
+          <p class="sub">What I reach for.</p>
+        </div>
+      </header>
+
+      <div class="toolkit">
+        {
+          toolkit.map((g) => (
+            <div>
+              <h3 class="eyebrow toolkit__group">{g.group}</h3>
+              <ul class="chips">
+                {g.items.map((item) => (
+                  <li class="chip">{item}</li>
+                ))}
+              </ul>
+            </div>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* Education */
+  .edu {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  .edu__card {
+    padding: clamp(28px, 3vw, 44px);
+    border: 1px solid var(--border);
+  }
+
+  .edu__card--current {
+    border: 1.5px solid var(--black);
+  }
+
+  .edu__meta {
+    color: var(--muted);
+    font-size: 10px;
+  }
+
+  .edu__school {
+    margin-top: 10px;
+    font-size: clamp(20px, 1.8vw, 25px);
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .edu__degree {
+    margin-top: 14px;
+    font-size: 17px;
+  }
+
+  .edu__badges {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+  }
+
+  .edu__badge {
+    letter-spacing: 0.04em;
+    text-transform: none;
+  }
+
+  .edu__note {
+    margin-top: 16px;
+    color: var(--muted);
+    font-size: 13px;
+    line-height: 1.7;
+  }
+
+  /* Experience */
+  .exp-section {
+    padding-top: 0;
+  }
+
+  .exp {
+    display: grid;
+    grid-template-columns: minmax(160px, 0.32fr) minmax(0, 1fr);
+    gap: 24px;
+    padding: 32px 0 36px;
+  }
+
+  .exp__date {
+    font-size: 13px;
+    font-weight: 700;
+  }
+
+  .exp__place {
+    margin-top: 2px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .exp__role {
+    font-size: clamp(18px, 1.5vw, 21px);
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .exp__org {
+    margin-top: 6px;
+    font-size: 16px;
+  }
+
+  .exp__body {
+    margin-top: 12px;
+    font-size: 14px;
+  }
+
+  /* Toolkit */
+  .toolkit {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 32px;
+  }
+
+  .toolkit__group {
+    font-size: 11px;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 18px;
+  }
+
+  .chip {
+    padding: 7px 14px;
+    border: 1px solid var(--border);
+    background: var(--white);
+    font-size: 12px;
+  }
+
+  @media (max-width: 960px) {
+    .toolkit {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .toolkit {
+      row-gap: 40px;
+    }
+  }
+
+  @media (max-width: 760px) {
+    .edu {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .exp {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 12px;
+    }
+  }
+
+  @media (max-width: 480px) {
+    .toolkit {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>

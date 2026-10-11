@@ -1,0 +1,124 @@
+---
+import Shapes, { type Shape } from './Shapes.astro';
+
+interface Props {
+  title: string;
+  lead?: string;
+  body?: string | string[];
+  shapes?: Shape[];
+  /** Show the headshot on the right, sitting on the bottom edge of the hero. */
+  photo?: boolean;
+  size?: 'xl' | 'lg';
+}
+
+const { title, lead, body, shapes = [], photo = false, size = 'lg' } = Astro.props;
+const paragraphs = body ? (Array.isArray(body) ? body : [body]) : [];
+---
+
+<section class:list={['hero', 'bg-grey', { 'hero--photo': photo }]}>
+  <Shapes shapes={shapes} />
+  <div class="container hero__inner">
+    <div class="hero__text">
+      <slot name="kicker" />
+      <h1 class:list={['display', `hero__title--${size}`]} set:html={title} />
+      {lead && <p class="lead hero__lead">{lead}</p>}
+      {paragraphs.map((p) => <p class="body hero__body">{p}</p>)}
+      <slot />
+    </div>
+    {
+      photo && (
+        <div class="hero__photo">
+          <img
+            src="/images/headshot.webp"
+            alt="Portrait of Maxwell Tebi"
+            width="512"
+            height="512"
+            fetchpriority="high"
+          />
+        </div>
+      )
+    }
+  </div>
+</section>
+
+<style>
+  .hero {
+    position: relative;
+    overflow: hidden;
+  }
+
+  .hero__inner {
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    padding-block: clamp(56px, 6.5vw, 96px) clamp(64px, 6.5vw, 96px);
+  }
+
+  .hero__text {
+    position: relative;
+    max-width: 760px;
+  }
+
+  .hero__title--xl {
+    font-size: clamp(46px, 5.6vw, 82px);
+  }
+
+  .hero__title--lg {
+    font-size: clamp(44px, 5.6vw, 82px);
+  }
+
+  .hero__lead {
+    margin-top: 18px;
+    max-width: 700px;
+  }
+
+  .hero__body {
+    margin-top: 22px;
+    max-width: 560px;
+  }
+
+  .hero__body + .hero__body {
+    margin-top: 16px;
+  }
+
+  /* With photo: two columns, picture anchored to the bottom edge. */
+  .hero--photo .hero__inner {
+    grid-template-columns: minmax(0, 1fr) minmax(0, 0.9fr);
+    gap: 40px;
+    padding-bottom: 0;
+  }
+
+  .hero--photo .hero__text {
+    padding-bottom: clamp(56px, 6.5vw, 96px);
+    align-self: center;
+  }
+
+  .hero__photo {
+    align-self: end;
+    justify-self: end;
+    width: min(100%, 620px);
+  }
+
+  .hero__photo img {
+    width: 100%;
+    height: auto;
+    /* Blends the photo's light backdrop into the grey hero. */
+    mix-blend-mode: darken;
+  }
+
+  @media (max-width: 860px) {
+    .hero--photo .hero__inner {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 0;
+    }
+
+    .hero--photo .hero__text {
+      padding-bottom: 40px;
+    }
+
+    .hero__photo {
+      justify-self: center;
+      width: min(100%, 420px);
+    }
+  }
+</style>

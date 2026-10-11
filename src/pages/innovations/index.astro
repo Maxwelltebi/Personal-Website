@@ -1,0 +1,185 @@
+---
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import ShuttleMap from '../../components/ShuttleMap.astro';
+import BuildCard from '../../components/BuildCard.astro';
+import { featured, filters, builds } from '../../data/innovations';
+---
+
+<Base title="Innovations">
+  <PageHero
+    title="My innovations"
+    lead="Research is the start. Software is how it ships."
+    body="Apps and systems I designed and built end to end, from the model or the database up to the screen someone taps."
+    shapes={[
+      { type: 'circle', top: '19%', left: '3.5%', size: 22 },
+      { type: 'circle', top: '23%', left: '68%', size: 285, desktop: true },
+      { type: 'square', top: '52%', left: '69.5%', size: 106, desktop: true },
+      { type: 'circle', top: '88%', left: '45.5%', size: 22, desktop: true },
+      { type: 'line', top: '99%', left: '76.5%', size: 330, angle: -30, desktop: true },
+    ]}
+  />
+
+  <section class="section">
+    <div class="container">
+      <article class="featured" id={featured.id}>
+        <div class="featured__text">
+          <div class="featured__tags">
+            <span class="tag tag--solid">{featured.tags[0]}</span>
+            <span class="tag tag--light">{featured.tags[1]}</span>
+          </div>
+          <h2 class="featured__title">{featured.title}</h2>
+          <p class="featured__lead">{featured.lead}</p>
+          <ul class="featured__points">
+            {featured.points.map((p) => <li>{p}</li>)}
+          </ul>
+          <p class="stack featured__stack">{featured.stack}</p>
+          <div class="featured__actions">
+            <a class="btn btn--solid" href={featured.code}>View code</a>
+            <a class="btn" href={featured.demo}>Live demo [Add link]</a>
+          </div>
+        </div>
+        <div class="featured__map">
+          <ShuttleMap />
+        </div>
+      </article>
+    </div>
+  </section>
+
+  <section class="section bg-grey" data-filter-group>
+    <div class="container">
+      <header class="section-head">
+        <div>
+          <h2 class="h-section">More builds</h2>
+          <p class="sub">Filter by what you care about.</p>
+        </div>
+        <div class="filters" role="group" aria-label="Filter builds">
+          {
+            filters.map((f, i) => (
+              <button class="filter" type="button" data-filter={f} aria-pressed={i === 0 ? 'true' : 'false'}>
+                {f}
+              </button>
+            ))
+          }
+        </div>
+      </header>
+
+      <div class="builds">
+        {builds.map((b) => <BuildCard build={b} />)}
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* Featured */
+  .featured {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border: 1px solid var(--black);
+    scroll-margin-top: 24px;
+  }
+
+  .featured__text {
+    padding: clamp(28px, 3.4vw, 48px);
+  }
+
+  .featured__map {
+    border-left: 1px solid var(--black);
+  }
+
+  .featured__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 6px;
+  }
+
+  .featured__tags .tag {
+    font-size: 9px;
+    padding: 4px 8px;
+  }
+
+  .featured__title {
+    margin-top: 18px;
+    font-size: clamp(34px, 3.4vw, 48px);
+    font-weight: 800;
+    line-height: 1.04;
+    text-transform: uppercase;
+  }
+
+  .featured__lead {
+    margin-top: 20px;
+    color: #333;
+    font-family: var(--font-light);
+    font-size: clamp(17px, 1.4vw, 20px);
+    line-height: 1.5;
+  }
+
+  .featured__points {
+    display: grid;
+    gap: 8px;
+    margin-top: 20px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .featured__points li {
+    position: relative;
+    padding-left: 18px;
+  }
+
+  .featured__points li::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0.62em;
+    width: 7px;
+    height: 7px;
+    background: var(--black);
+  }
+
+  .featured__stack {
+    margin-top: 20px;
+    font-size: 11px;
+  }
+
+  .featured__actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    margin-top: 24px;
+  }
+
+  /* More builds */
+  .builds {
+    display: grid;
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+    gap: 20px;
+  }
+
+  @media (max-width: 960px) {
+    .featured {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .featured__map {
+      border-left: 0;
+      border-top: 1px solid var(--black);
+      height: 380px;
+    }
+
+    .builds {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 620px) {
+    .builds {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .featured__actions .btn {
+      flex: 1;
+    }
+  }
+</style>

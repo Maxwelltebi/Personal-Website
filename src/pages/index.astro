@@ -1,0 +1,218 @@
+---
+import Base from '../layouts/Base.astro';
+import PageHero from '../components/PageHero.astro';
+import RowList from '../components/RowList.astro';
+import { site } from '../data/site';
+import { tracks, stats, selectedWork } from '../data/home';
+---
+
+<Base>
+  <PageHero
+    title="Hi, I'm<br />Maxwell<br />Tebi"
+    size="xl"
+    lead="I am an Innovator & Researcher"
+    body="I research to discover, but I don't stop there. I turn what I find into products people can use. Computer Science major, Mathematics minor, Livingstone College. Research in applied machine learning and AI for healthcare and finance."
+    photo
+    shapes={[
+      { type: 'circle', top: '4%', left: '6%', size: 64 },
+      { type: 'line', top: '25%', left: '46.5%', size: 300, angle: -30, desktop: true },
+      { type: 'square', top: '5%', right: '1%', size: 96, desktop: true },
+      { type: 'circle', top: '43%', left: '31%', size: 22, desktop: true },
+      { type: 'circle', top: '62%', left: '50.5%', size: 22, desktop: true },
+      { type: 'circle', top: '93%', left: '16%', size: 22, desktop: true },
+    ]}
+  >
+    <div class="hero-actions">
+      <a class="btn btn--solid" href={site.resume.href} data-resume-open>View my résumé</a>
+      <a class="btn" href={`mailto:${site.email}`}>Hire me</a>
+    </div>
+    <div class="hero-links">
+      <a href={site.linkedin} target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a href={site.github} target="_blank" rel="noopener">GitHub ↗</a>
+    </div>
+  </PageHero>
+
+  <section class="section">
+    <div class="container">
+      <header class="center-head">
+        <h2 class="h-section">What I do</h2>
+        <p class="sub">Two tracks, one habit: find out, then build.</p>
+      </header>
+
+      <div class="tracks">
+        {
+          tracks.map((t) => (
+            <article class="track">
+              <span class:list={['track__shape', `track__shape--${t.shape}`]} data-shape={t.shape} aria-hidden="true" />
+              <p class="eyebrow track__num">{t.num}</p>
+              <h3 class="track__title">{t.title}</h3>
+              <p class="track__lead">{t.lead}</p>
+              <p class="body track__body">{t.body}</p>
+              <a class="link-arrow track__cta" href={t.cta.href}>
+                {t.cta.label} →
+              </a>
+            </article>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <section class="section bg-grey stats-band">
+    <div class="container stats">
+      {
+        stats.map((s) => (
+          <div class="stat">
+            <p class="stat__value">{s.value}</p>
+            <p class="stat__label">{s.label}</p>
+          </div>
+        ))
+      }
+    </div>
+  </section>
+
+  <section class="section">
+    <div class="container">
+      <header class="section-head">
+        <div>
+          <h2 class="h-section">Selected work</h2>
+          <p class="sub">Research that became something you can use.</p>
+        </div>
+        <a class="btn btn--sm" href="/innovations">View all</a>
+      </header>
+
+      <RowList rows={selectedWork} numbered />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero-actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 14px;
+    margin-top: 36px;
+  }
+
+  .hero-links {
+    display: flex;
+    gap: 24px;
+    margin-top: 32px;
+  }
+
+  .hero-links a {
+    font-size: 12px;
+    font-weight: 700;
+    text-underline-offset: 3px;
+  }
+
+  .hero-links a:hover {
+    opacity: 0.6;
+  }
+
+  /* What I do */
+  .center-head {
+    text-align: center;
+    margin-bottom: clamp(40px, 4vw, 64px);
+  }
+
+  .tracks {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 24px;
+  }
+
+  .track {
+    position: relative;
+    overflow: hidden;
+    padding: clamp(32px, 3.4vw, 48px);
+    padding-bottom: clamp(36px, 3.6vw, 56px);
+    border: 1px solid var(--border);
+  }
+
+  .track__shape {
+    position: absolute;
+    border: 1px solid var(--border);
+    pointer-events: none;
+  }
+
+  .track__shape--circle {
+    top: -20px;
+    right: -20px;
+    width: 140px;
+    height: 140px;
+    border-radius: 50%;
+  }
+
+  .track__shape--square {
+    top: 36px;
+    right: 36px;
+    width: 56px;
+    height: 56px;
+  }
+
+  .track__num {
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .track__title {
+    margin-top: 18px;
+    font-size: clamp(24px, 2vw, 29px);
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .track__lead {
+    margin-top: 12px;
+    font-family: var(--font-light);
+    font-weight: 300;
+    font-size: clamp(19px, 1.5vw, 22px);
+  }
+
+  .track__body {
+    margin-top: 18px;
+    font-size: 14px;
+  }
+
+  .track__cta {
+    display: inline-block;
+    margin-top: 26px;
+    font-size: 11px;
+  }
+
+  /* Stats */
+  .stats-band {
+    padding-block: clamp(56px, 6vw, 88px);
+  }
+
+  .stats {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 24px;
+    text-align: center;
+  }
+
+  .stat__value {
+    font-size: clamp(40px, 3.8vw, 56px);
+    font-weight: 800;
+    line-height: 1;
+  }
+
+  .stat__label {
+    margin-top: 14px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  @media (max-width: 860px) {
+    .tracks {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .stats {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      row-gap: 48px;
+    }
+  }
+</style>

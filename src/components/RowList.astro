@@ -1,0 +1,106 @@
+---
+import Icon from './Icon.astro';
+
+/** Ruled list of linked rows with an ↗ arrow (Home "Selected work", Blog "Latest posts"). */
+export type Row = {
+  title: string;
+  meta: string;
+  href: string;
+  /** Small caps label above the title (blog category). */
+  eyebrow?: string;
+  /** Pipe-separated filter categories, for use inside [data-filter-group]. */
+  categories?: string;
+};
+
+interface Props {
+  rows: Row[];
+  numbered?: boolean;
+}
+
+const { rows, numbered = false } = Astro.props;
+---
+
+<ol class:list={['rule-list', 'rows', { 'rows--numbered': numbered }]}>
+  {
+    rows.map((r, i) => (
+      <li data-categories={r.categories}>
+        <a class="row" href={r.href}>
+          {numbered && <span class="row__num">{String(i + 1).padStart(2, '0')}</span>}
+          <span class="row__text">
+            {r.eyebrow && <span class="eyebrow row__eyebrow">{r.eyebrow}</span>}
+            <span class="row__title">{r.title}</span>
+            <span class="row__meta">{r.meta}</span>
+          </span>
+          <span class="row__arrow">
+            <Icon name="arrow-up-right" size={16} />
+          </span>
+        </a>
+      </li>
+    ))
+  }
+</ol>
+
+<style>
+  .row {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+    align-items: center;
+    gap: 16px;
+    padding: 28px 16px 28px 12px;
+    text-decoration: none;
+  }
+
+  .rows--numbered .row {
+    grid-template-columns: 78px minmax(0, 1fr) auto;
+  }
+
+  .row__num {
+    color: var(--muted);
+    font-size: 11px;
+    font-weight: 700;
+  }
+
+  .row__text {
+    display: grid;
+    gap: 6px;
+  }
+
+  .row__eyebrow {
+    color: var(--muted);
+    font-size: 10px;
+  }
+
+  .row__title {
+    font-size: clamp(18px, 1.6vw, 23px);
+    font-weight: 700;
+    text-transform: uppercase;
+  }
+
+  .row__meta {
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .row__arrow {
+    transition: transform 0.2s;
+  }
+
+  .row:hover .row__arrow {
+    transform: translate(3px, -3px);
+  }
+
+  @media (max-width: 560px) {
+    .row {
+      align-items: start;
+      padding: 22px 0;
+    }
+
+    .rows--numbered .row {
+      grid-template-columns: 36px minmax(0, 1fr) auto;
+    }
+
+    .row__num {
+      padding-top: 5px;
+    }
+  }
+</style>

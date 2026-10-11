@@ -1,0 +1,57 @@
+---
+import '../styles/global.css';
+import Nav from '../components/Nav.astro';
+import Footer from '../components/Footer.astro';
+import ResumeModal from '../components/ResumeModal.astro';
+import { site } from '../data/site';
+
+interface Props {
+  title?: string;
+  description?: string;
+}
+
+const { title, description = site.description } = Astro.props;
+const fullTitle = title ? `${title} · ${site.name}` : `${site.name} · Innovator & Researcher`;
+---
+
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{fullTitle}</title>
+    <meta name="description" content={description} />
+    <meta property="og:title" content={fullTitle} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content="/images/headshot.webp" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+  </head>
+  <body>
+    <Nav />
+    <main>
+      <slot />
+    </main>
+    <Footer />
+    <ResumeModal />
+
+    <script>
+      // Filter rows (Innovations "More builds", Blog "Latest posts").
+      // Markup: [data-filter-group] wraps buttons [data-filter] and items [data-categories].
+      document.querySelectorAll<HTMLElement>('[data-filter-group]').forEach((group) => {
+        const buttons = group.querySelectorAll<HTMLButtonElement>('[data-filter]');
+        const items = group.querySelectorAll<HTMLElement>('[data-categories]');
+
+        buttons.forEach((btn) =>
+          btn.addEventListener('click', () => {
+            const value = btn.dataset.filter!;
+            buttons.forEach((b) => b.setAttribute('aria-pressed', String(b === btn)));
+            items.forEach((item) => {
+              const cats = item.dataset.categories!.split('|');
+              item.hidden = value !== 'All' && !cats.includes(value);
+            });
+          }),
+        );
+      });
+    </script>
+  </body>
+</html>

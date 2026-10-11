@@ -1,0 +1,53 @@
+---
+interface Props {
+  facts: { label: string; value: string }[];
+}
+
+const { facts } = Astro.props;
+---
+
+<section class="bg-dark on-dark">
+  <dl class="container facts" style={{ '--cols': Math.min(facts.length, 4) }}>
+    {
+      facts.map((f) => (
+        <div>
+          <dt class="eyebrow facts__label">{f.label}</dt>
+          <dd class="facts__value">{f.value}</dd>
+        </div>
+      ))
+    }
+  </dl>
+</section>
+
+<style>
+  .facts {
+    display: grid;
+    grid-template-columns: repeat(var(--cols), minmax(0, 1fr));
+    gap: 24px;
+    margin-block: 0;
+    padding-block: 48px;
+  }
+
+  .facts__label {
+    color: var(--on-dark-muted);
+    font-size: 10px;
+  }
+
+  .facts__value {
+    margin: 8px 0 0;
+    font-size: 14px;
+    font-weight: 700;
+  }
+
+  @media (max-width: 960px) {
+    .facts {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+  }
+
+  @media (max-width: 480px) {
+    .facts {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+</style>
