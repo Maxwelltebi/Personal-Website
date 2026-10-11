@@ -5,8 +5,8 @@ import Icon from './Icon.astro';
 const { href, file, pages } = site.resume;
 ---
 
-<dialog class="resume" id="resume-modal" aria-labelledby="resume-title">
-  <div class="resume__panel">
+<dialog class="resume" id="resume-modal" aria-labelledby="resume-title" data-src={href}>
+  <div class="resume__panel" tabindex="-1" autofocus>
     <header class="resume__head">
       <div>
         <h2 class="resume__title" id="resume-title">Résumé</h2>
@@ -22,9 +22,9 @@ const { href, file, pages } = site.resume;
     </header>
 
     <div class="resume__body">
-      <iframe class="resume__frame" title="Maxwell Tebi résumé" data-src={`${href}#view=FitH`}></iframe>
-      <div class="resume__fallback placeholder">
-        <p>PDF preview isn't available on this screen</p>
+      <div class="resume__pages" data-pages aria-label="Résumé preview"></div>
+      <div class="resume__fallback placeholder" data-fallback hidden>
+        <p>The preview couldn't load</p>
         <a class="btn btn--solid" href={href} target="_blank" rel="noopener">Open résumé</a>
       </div>
     </div>
@@ -33,14 +33,49 @@ const { href, file, pages } = site.resume;
 
 <script>
   const dialog = document.getElementById('resume-modal') as HTMLDialogElement | null;
-  const frame = dialog?.querySelector<HTMLIFrameElement>('.resume__frame');
+  const pagesEl = dialog?.querySelector<HTMLElement>('[data-pages]');
+  const fallback = dialog?.querySelector<HTMLElement>('[data-fallback]');
+  let rendered: Promise<void> | null = null;
+
+  // Draws each PDF page to a canvas, so the preview looks the same in every browser,
+  // phones included. pdf.js is only downloaded the first time the résumé is opened.
+  async function renderPdf() {
+    if (!dialog || !pagesEl) return;
+    try {
+      const pdfjs = await import('pdfjs-dist');
+      const worker = await import('pdfjs-dist/build/pdf.worker.min.mjs?url');
+      pdfjs.GlobalWorkerOptions.workerSrc = worker.default;
+
+      const pdf = await pdfjs.getDocument({ url: dialog.dataset.src!, disableFontFace: true }).promise;
+      const width = pagesEl.clientWidth;
+      const ratio = Math.min(window.devicePixelRatio || 1, 2);
+
+      for (let n = 1; n <= pdf.numPages; n++) {
+        const page = await pdf.getPage(n);
+        const base = page.getViewport({ scale: 1 });
+        const viewport = page.getViewport({ scale: (width / base.width) * ratio });
+        const canvas = document.createElement('canvas');
+        canvas.className = 'resume__page';
+        canvas.width = viewport.width;
+        canvas.height = viewport.height;
+        canvas.setAttribute('role', 'img');
+        canvas.setAttribute('aria-label', `Résumé page ${n}`);
+        pagesEl.append(canvas);
+        await page.render({ canvas, viewport }).promise;
+      }
+    } catch (err) {
+      console.error(err);
+      rendered = null;
+      pagesEl.hidden = true;
+      if (fallback) fallback.hidden = false;
+    }
+  }
 
   const open = () => {
     if (!dialog) return;
-    // Load the PDF only on first open so it never slows the page down.
-    if (frame && !frame.src) frame.src = frame.dataset.src ?? '';
     dialog.showModal();
     document.body.classList.add('modal-open');
+    rendered ??= renderPdf();
   };
 
   document.addEventListener('click', (e) => {
@@ -55,7 +90,13 @@ const { href, file, pages } = site.resume;
   dialog?.addEventListener('click', (e) => {
     if (e.target === dialog) dialog.close();
   });
-  dialog?.addEventListener('close', () => document.body.classList.remove('modal-open'));
+  dialog?.addEventListener('close', () => {
+    document.body.classList.remove('modal-open');
+    if (location.hash === '#resume') history.replaceState(null, '', location.pathname + location.search);
+  });
+
+  // Shareable link: any page + #resume opens the résumé.
+  if (location.hash === '#resume') open();
 </script>
 
 <style>
@@ -78,6 +119,7 @@ const { href, file, pages } = site.resume;
     display: flex;
     flex-direction: column;
     height: 100%;
+    outline: none;
   }
 
   .resume__head {
@@ -124,21 +166,27 @@ const { href, file, pages } = site.resume;
   .resume__body {
     flex: 1;
     min-height: 0;
+    overflow-y: auto;
     padding: 28px;
     background: var(--grey-2);
   }
 
-  .resume__frame {
+  .resume__pages {
+    display: grid;
+    gap: 20px;
+    min-height: 100%;
+  }
+
+  .resume__pages :global(.resume__page) {
     display: block;
     width: 100%;
-    height: 100%;
-    border: 0;
+    height: auto;
     background: var(--white);
     box-shadow: 0 2px 14px rgba(0, 0, 0, 0.08);
   }
 
   .resume__fallback {
-    display: none;
+    display: grid;
     height: 100%;
     gap: 20px;
     align-content: center;
@@ -146,13 +194,14 @@ const { href, file, pages } = site.resume;
     text-align: center;
   }
 
-  /* Phone browsers can't show PDFs inline, so they get an Open button instead. */
-  @media (max-width: 720px), (pointer: coarse) and (max-width: 1024px) {
+  @media (max-width: 720px) {
     .resume {
-      height: auto;
+      width: calc(100% - 24px);
+      height: calc(100dvh - 24px);
     }
 
     .resume__head {
+      position: relative;
       flex-direction: column;
       align-items: stretch;
       padding: 18px 16px;
@@ -169,16 +218,7 @@ const { href, file, pages } = site.resume;
     }
 
     .resume__body {
-      padding: 16px;
-    }
-
-    .resume__frame {
-      display: none;
-    }
-
-    .resume__fallback {
-      display: grid;
-      min-height: 220px;
+      padding: 12px;
     }
   }
 
