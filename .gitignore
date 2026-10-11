@@ -11,3 +11,15 @@
 *.tiff
 *.avif
 *.heic
+
+# Local notes
+repo_format.md
+
+# Site images in public/ are deployed; everything above still keeps the UI mockups out of git
+!public/**
+
+# Build & dependencies
+node_modules/
+dist/
+.astro/
+.env
