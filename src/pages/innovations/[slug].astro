@@ -1,0 +1,157 @@
+---
+import type { GetStaticPaths } from 'astro';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import FactsBar from '../../components/FactsBar.astro';
+import RowList from '../../components/RowList.astro';
+import { builds, type Build } from '../../data/innovations';
+
+export const getStaticPaths = (() =>
+  builds.map((build) => ({ params: { slug: build.slug }, props: { build } }))) satisfies GetStaticPaths;
+
+const { build } = Astro.props as { build: Build };
+
+// Case-study write-ups aren't in yet; each section shows a placeholder until you add one.
+const sections = [
+  { label: 'The problem', text: '[Add case study: what problem this solves and who it is for.]' },
+  { label: 'What I built', text: '[Add case study: the product, the main decisions, and how it fits together.]' },
+  { label: 'Results', text: '[Add case study: what it achieved, measured where possible.]' },
+  { label: "What's next", text: '[Add case study: what you would build or test next.]' },
+];
+
+const others = builds
+  .filter((b) => b.slug !== build.slug)
+  .map((b) => ({ title: b.title, meta: `${b.badge} · ${b.stack}`, href: `/innovations/${b.slug}` }));
+---
+
+<Base title={build.title} description={build.body}>
+  <PageHero
+    title={build.title}
+    body={build.body}
+    shapes={[
+      { type: 'circle', top: '16%', left: '3.5%', size: 22 },
+      { type: 'circle', top: '20%', left: '70%', size: 260, desktop: true },
+      { type: 'square', top: '50%', left: '71.5%', size: 96, desktop: true },
+      { type: 'line', top: '98%', left: '78%', size: 300, angle: -30, desktop: true },
+    ]}
+  >
+    <div class="kicker" slot="kicker">
+      <a class="link-arrow" href="/innovations">← All innovations</a>
+      <span class="tag">{build.badge}</span>
+    </div>
+    <div class="actions">
+      <a class="btn btn--solid" href={build.code}>View code</a>
+      <a class="btn" href="#">Live demo [Add link]</a>
+    </div>
+  </PageHero>
+
+  <FactsBar
+    facts={[
+      { label: 'Highlight', value: build.badge },
+      { label: 'Built with', value: build.stack },
+      { label: 'Focus', value: build.categories.join(' · ') },
+    ]}
+  />
+
+  <section class="section">
+    <div class="container">
+      <div class="placeholder shot">[Add screenshot]</div>
+
+      <ol class="rule-list story">
+        {
+          sections.map((s, i) => (
+            <li class="story__row">
+              <div>
+                <p class="eyebrow story__num">{String(i + 1).padStart(2, '0')}</p>
+                <h2 class="story__label">{s.label}</h2>
+              </div>
+              <p class="body story__text">{s.text}</p>
+            </li>
+          ))
+        }
+      </ol>
+    </div>
+  </section>
+
+  <section class="section bg-grey">
+    <div class="container">
+      <header class="section-head">
+        <div>
+          <h2 class="h-section">More builds</h2>
+          <p class="sub">Keep looking around.</p>
+        </div>
+        <a class="btn btn--sm" href="/innovations">View all</a>
+      </header>
+      <RowList rows={others} numbered />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .kicker {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 20px;
+    margin-bottom: 28px;
+  }
+
+  .kicker .link-arrow {
+    font-size: 11px;
+  }
+
+  .kicker .tag {
+    font-size: 9px;
+    padding: 4px 8px;
+  }
+
+  .actions {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12px;
+    margin-top: 32px;
+  }
+
+  .shot {
+    aspect-ratio: 16 / 8;
+    border: 1px solid var(--border);
+  }
+
+  .story {
+    margin-top: clamp(48px, 5vw, 72px);
+  }
+
+  .story__row {
+    display: grid;
+    grid-template-columns: minmax(180px, 0.32fr) minmax(0, 1fr);
+    gap: 24px;
+    padding: 32px 0 36px;
+  }
+
+  .story__num {
+    color: var(--muted);
+    font-size: 10px;
+  }
+
+  .story__label {
+    margin-top: 6px;
+    font-size: clamp(18px, 1.5vw, 21px);
+    font-weight: 800;
+    text-transform: uppercase;
+  }
+
+  .story__text {
+    font-size: 15px;
+  }
+
+  @media (max-width: 760px) {
+    .shot {
+      aspect-ratio: 4 / 3;
+    }
+
+    .story__row {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 10px;
+    }
+  }
+</style>

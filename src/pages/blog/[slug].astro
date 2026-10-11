@@ -1,0 +1,197 @@
+---
+import { getCollection, render } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import RowList from '../../components/RowList.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog');
+  return posts.map((post) => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+const { title, summary, category, date, readTime, cover } = post.data;
+
+const more = (await getCollection('blog'))
+  .filter((p) => p.id !== post.id)
+  .sort((a, b) => a.data.order - b.data.order)
+  .slice(0, 3)
+  .map((p) => ({
+    eyebrow: p.data.category,
+    title: p.data.title,
+    meta: `${p.data.summary} · ${p.data.date} · ${p.data.readTime} min read`,
+    href: `/blog/${p.id}`,
+  }));
+---
+
+<Base title={title} description={summary}>
+  <PageHero
+    title={title}
+    lead={summary}
+    shapes={[
+      { type: 'circle', top: '18%', left: '4%', size: 64 },
+      { type: 'square', top: '24%', left: '80%', size: 120, desktop: true },
+      { type: 'square', top: '32%', left: '84%', size: 120, desktop: true },
+      { type: 'line', top: '92%', left: '60%', size: 240, angle: -30, desktop: true },
+    ]}
+  >
+    <div class="kicker" slot="kicker">
+      <a class="link-arrow" href="/blog">← All posts</a>
+      <span class="tag tag--solid">{category}</span>
+    </div>
+    <p class="meta">{date} · {readTime} min read</p>
+  </PageHero>
+
+  <article class="section">
+    <div class="container article">
+      {
+        cover ? (
+          <img class="cover" src={cover} alt="" />
+        ) : (
+          <div class="placeholder cover">[Cover image]</div>
+        )
+      }
+      <div class="prose">
+        <Content />
+      </div>
+    </div>
+  </article>
+
+  {
+    more.length > 0 && (
+      <section class="section bg-grey">
+        <div class="container">
+          <header class="section-head">
+            <div>
+              <h2 class="h-section">Latest posts</h2>
+              <p class="sub">Keep reading.</p>
+            </div>
+            <a class="btn btn--sm" href="/blog">View all</a>
+          </header>
+          <RowList rows={more} />
+        </div>
+      </section>
+    )
+  }
+</Base>
+
+<style>
+  .kicker {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 12px 20px;
+    margin-bottom: 28px;
+  }
+
+  .kicker .link-arrow {
+    font-size: 11px;
+  }
+
+  .kicker .tag {
+    font-size: 9px;
+    padding: 4px 8px;
+  }
+
+  .meta {
+    margin-top: 22px;
+    color: var(--muted);
+    font-size: 13px;
+  }
+
+  .cover {
+    width: 100%;
+    aspect-ratio: 16 / 7;
+    object-fit: cover;
+    border: 1px solid var(--black);
+  }
+
+  .prose {
+    max-width: 720px;
+    margin: clamp(40px, 5vw, 72px) auto 0;
+    color: #333;
+    font-size: 17px;
+    line-height: 1.85;
+  }
+
+  .prose :global(> * + *) {
+    margin-top: 1.2em;
+  }
+
+  .prose :global(h2),
+  .prose :global(h3) {
+    margin-top: 2em;
+    color: var(--black);
+    font-weight: 800;
+    line-height: 1.2;
+    text-transform: uppercase;
+  }
+
+  .prose :global(h2) {
+    font-size: clamp(24px, 2.2vw, 30px);
+  }
+
+  .prose :global(h3) {
+    font-size: clamp(19px, 1.7vw, 22px);
+  }
+
+  .prose :global(a) {
+    font-weight: 600;
+    text-underline-offset: 3px;
+  }
+
+  .prose :global(ul),
+  .prose :global(ol) {
+    padding-left: 1.3em;
+  }
+
+  .prose :global(ul) {
+    list-style: square;
+  }
+
+  .prose :global(ol) {
+    list-style: decimal;
+  }
+
+  .prose :global(blockquote) {
+    margin-inline: 0;
+    padding-left: 22px;
+    border-left: 3px solid var(--black);
+    font-family: var(--font-light);
+    font-size: 21px;
+  }
+
+  .prose :global(code) {
+    padding: 2px 6px;
+    background: var(--grey);
+    font-size: 0.88em;
+  }
+
+  .prose :global(pre) {
+    padding: 20px;
+    overflow-x: auto;
+    background: var(--black);
+    color: var(--white);
+    font-size: 14px;
+  }
+
+  .prose :global(pre code) {
+    padding: 0;
+    background: none;
+  }
+
+  .prose :global(img) {
+    border: 1px solid var(--border);
+  }
+
+  @media (max-width: 760px) {
+    .cover {
+      aspect-ratio: 4 / 3;
+    }
+
+    .prose {
+      font-size: 16px;
+    }
+  }
+</style>

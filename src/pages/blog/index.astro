@@ -1,0 +1,157 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../../layouts/Base.astro';
+import PageHero from '../../components/PageHero.astro';
+import RowList from '../../components/RowList.astro';
+
+const filters = ['All', 'Research', 'Engineering', 'Leadership', 'Notes'];
+
+const posts = (await getCollection('blog')).sort((a, b) => a.data.order - b.data.order);
+const featured = posts.find((p) => p.data.featured);
+const latest = posts
+  .filter((p) => p !== featured)
+  .map((p) => ({
+    eyebrow: p.data.category,
+    title: p.data.title,
+    meta: `${p.data.summary} · ${p.data.date} · ${p.data.readTime} min read`,
+    href: `/blog/${p.id}`,
+    categories: p.data.category,
+  }));
+---
+
+<Base title="Blog">
+  <PageHero
+    title="Blog"
+    lead="Notes from the bench."
+    body="Write-ups on research I'm running, things I've built, and what I learn leading student communities."
+    shapes={[
+      { type: 'circle', top: '20%', left: '4%', size: 64 },
+      { type: 'circle', top: '37%', left: '45.5%', size: 22, desktop: true },
+      { type: 'square', top: '27%', left: '78.5%', size: 120, desktop: true },
+      { type: 'square', top: '35%', left: '82.5%', size: 120, desktop: true },
+      { type: 'line', top: '92%', left: '56.5%', size: 240, angle: -30, desktop: true },
+    ]}
+  />
+
+  {
+    featured && (
+      <section class="section featured-section">
+        <div class="container">
+          <a class="featured" href={`/blog/${featured.id}`}>
+            {featured.data.cover ? (
+              <img class="featured__cover" src={featured.data.cover} alt="" loading="lazy" />
+            ) : (
+              <div class="placeholder featured__cover">[Cover image]</div>
+            )}
+            <div class="featured__text">
+              <span class="tag tag--solid featured__tag">Featured · {featured.data.category}</span>
+              <h2 class="featured__title">{featured.data.title}</h2>
+              <p class="featured__summary">{featured.data.summary}</p>
+              <p class="featured__meta">
+                {featured.data.date} · {featured.data.readTime} min read
+              </p>
+              <span class="link-arrow featured__cta">Read post →</span>
+            </div>
+          </a>
+        </div>
+      </section>
+    )
+  }
+
+  <section class="section latest" data-filter-group>
+    <div class="container">
+      <header class="section-head">
+        <div>
+          <h2 class="h-section">Latest posts</h2>
+          <p class="sub">Pick a topic.</p>
+        </div>
+        <div class="filters" role="group" aria-label="Filter posts">
+          {
+            filters.map((f, i) => (
+              <button class="filter" type="button" data-filter={f} aria-pressed={i === 0 ? 'true' : 'false'}>
+                {f}
+              </button>
+            ))
+          }
+        </div>
+      </header>
+
+      <RowList rows={latest} />
+    </div>
+  </section>
+</Base>
+
+<style>
+  .featured-section {
+    padding-bottom: 0;
+  }
+
+  .featured {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    border: 1px solid var(--black);
+    text-decoration: none;
+  }
+
+  .featured__cover {
+    width: 100%;
+    height: 100%;
+    min-height: 320px;
+    object-fit: cover;
+    border-right: 1px solid var(--black);
+  }
+
+  .featured__text {
+    align-self: center;
+    padding: clamp(28px, 3.4vw, 48px);
+  }
+
+  .featured__tag {
+    font-size: 10px;
+  }
+
+  .featured__title {
+    margin-top: 16px;
+    font-size: clamp(28px, 2.6vw, 38px);
+    font-weight: 800;
+    line-height: 1.12;
+    text-transform: uppercase;
+  }
+
+  .featured__summary {
+    margin-top: 18px;
+    color: #333;
+    font-family: var(--font-light);
+    font-size: clamp(17px, 1.4vw, 19px);
+    line-height: 1.5;
+  }
+
+  .featured__meta {
+    margin-top: 16px;
+    color: var(--muted);
+    font-size: 12px;
+  }
+
+  .featured__cta {
+    display: inline-block;
+    margin-top: 22px;
+    font-size: 11px;
+  }
+
+  .featured:hover .featured__cta {
+    opacity: 0.65;
+  }
+
+  @media (max-width: 860px) {
+    .featured {
+      grid-template-columns: minmax(0, 1fr);
+    }
+
+    .featured__cover {
+      min-height: 220px;
+      aspect-ratio: 16 / 10;
+      border-right: 0;
+      border-bottom: 1px solid var(--black);
+    }
+  }
+</style>
