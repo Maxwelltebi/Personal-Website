@@ -1,0 +1,17 @@
+{
+  "title": "Grade Prediction System",
+  "order": 50,
+  "badge": "88% test accuracy",
+  "summary": "A Random Forest trained on 25,000 student records predicts A to F grades with class probabilities, served through a React and FastAPI app.",
+  "stack": "scikit-learn · FastAPI · React",
+  "categories": [
+    "AI"
+  ],
+  "screenshot": null,
+  "codeUrl": "",
+  "demoUrl": "",
+  "problem": "",
+  "built": "",
+  "results": "",
+  "next": ""
+}

@@ -4,30 +4,35 @@ import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import FactsBar from '../../components/FactsBar.astro';
 import RowList from '../../components/RowList.astro';
-import { builds, type Build } from '../../data/innovations';
+import { getProjects, href, demoLabel, type Project } from '../../lib/content';
 
-export const getStaticPaths = (() =>
-  builds.map((build) => ({ params: { slug: build.slug }, props: { build } }))) satisfies GetStaticPaths;
+export const getStaticPaths = (async () =>
+  (await getProjects()).map((build) => ({ params: { slug: build.slug }, props: { build } }))) satisfies GetStaticPaths;
 
-const { build } = Astro.props as { build: Build };
+const { build } = Astro.props as { build: Project };
+const builds = await getProjects();
 
-// Case-study write-ups aren't in yet; each section shows a placeholder until you add one.
+// Each section shows a placeholder until it's written in the editor. Blank lines start a new paragraph.
 const sections = [
-  { label: 'The problem', text: '[Add case study: what problem this solves and who it is for.]' },
-  { label: 'What I built', text: '[Add case study: the product, the main decisions, and how it fits together.]' },
-  { label: 'Results', text: '[Add case study: what it achieved, measured where possible.]' },
-  { label: "What's next", text: '[Add case study: what you would build or test next.]' },
-];
+  { label: 'The problem', text: build.problem, empty: '[Add case study: what problem this solves and who it is for.]' },
+  { label: 'What I built', text: build.built, empty: '[Add case study: the product, the main decisions, and how it fits together.]' },
+  { label: 'Results', text: build.results, empty: '[Add case study: what it achieved, measured where possible.]' },
+  { label: "What's next", text: build.next, empty: '[Add case study: what you would build or test next.]' },
+].map((s) => ({ ...s, paragraphs: (s.text?.trim() || s.empty).split(/\n\s*\n/) }));
 
 const others = builds
   .filter((b) => b.slug !== build.slug)
-  .map((b) => ({ title: b.title, meta: `${b.badge} · ${b.stack}`, href: `/innovations/${b.slug}` }));
+  .map((b) => ({
+    title: b.title,
+    meta: [b.badge, b.stack].filter(Boolean).join(' · '),
+    href: `/innovations/${b.slug}`,
+  }));
 ---
 
-<Base title={build.title} description={build.body}>
+<Base title={build.title} description={build.summary}>
   <PageHero
     title={build.title}
-    body={build.body}
+    body={build.summary}
     shapes={[
       { type: 'circle', top: '7%', left: '3.5%', size: 22 },
       { type: 'circle', top: '20%', left: '70%', size: 260, desktop: true },
@@ -37,11 +42,11 @@ const others = builds
   >
     <div class="kicker" slot="kicker">
       <a class="link-arrow" href="/innovations">← All innovations</a>
-      <span class="tag">{build.badge}</span>
+      {build.badge && <span class="tag">{build.badge}</span>}
     </div>
     <div class="actions">
-      <a class="btn btn--solid" href={build.code}>View code</a>
-      <a class="btn" href="#">Live demo [Add link]</a>
+      <a class="btn btn--solid" href={href(build.codeUrl)}>View code</a>
+      <a class="btn" href={href(build.demoUrl)}>{demoLabel(build.demoUrl)}</a>
     </div>
   </PageHero>
 
@@ -50,12 +55,18 @@ const others = builds
       { label: 'Highlight', value: build.badge },
       { label: 'Built with', value: build.stack },
       { label: 'Focus', value: build.categories.join(' · ') },
-    ]}
+    ].filter((f) => f.value)}
   />
 
   <section class="section">
     <div class="container">
-      <div class="placeholder shot">[Add screenshot]</div>
+      {
+        build.screenshot ? (
+          <img class="shot" src={build.screenshot} alt={`${build.title} screenshot`} loading="lazy" />
+        ) : (
+          <div class="placeholder shot">[Add screenshot]</div>
+        )
+      }
 
       <ol class="rule-list story">
         {
@@ -65,7 +76,9 @@ const others = builds
                 <p class="eyebrow story__num">{String(i + 1).padStart(2, '0')}</p>
                 <h2 class="story__label">{s.label}</h2>
               </div>
-              <p class="body story__text">{s.text}</p>
+              <div class="body story__text">
+                {s.paragraphs.map((p) => <p>{p}</p>)}
+              </div>
             </li>
           ))
         }
@@ -113,7 +126,9 @@ const others = builds
   }
 
   .shot {
+    width: 100%;
     aspect-ratio: 16 / 8;
+    object-fit: cover;
     border: 1px solid var(--border);
   }
 
@@ -142,6 +157,10 @@ const others = builds
 
   .story__text {
     font-size: 15px;
+  }
+
+  .story__text p + p {
+    margin-top: 1em;
   }
 
   @media (max-width: 760px) {

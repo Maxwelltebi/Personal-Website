@@ -1,10 +1,6 @@
 ---
 title: '[Post title]'
 summary: '[One-line summary]'
-category: 'Notes'
-date: '[Date]'
-readTime: '[X]'
-order: 4
+category: Notes
 ---
-
 [Write your post here.]

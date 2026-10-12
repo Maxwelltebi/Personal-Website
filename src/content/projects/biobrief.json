@@ -1,0 +1,18 @@
+{
+  "title": "BioBrief",
+  "order": 10,
+  "badge": "3rd place · Claude Builder Hackathon",
+  "summary": "Explains medical lab results in plain English and Twi. Patients receive results by QR code or SMS, and lab technicians work from a dashboard. It grew into a B2B concept for hospitals.",
+  "stack": "AI · Web app · Technician dashboard",
+  "categories": [
+    "AI",
+    "Healthcare"
+  ],
+  "screenshot": null,
+  "codeUrl": "",
+  "demoUrl": "",
+  "problem": "",
+  "built": "",
+  "results": "",
+  "next": ""
+}

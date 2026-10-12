@@ -1,6 +1,8 @@
 ---
-import { site } from '../data/site';
+import { getSite } from '../lib/content';
 import Shapes from './Shapes.astro';
+
+const site = await getSite();
 ---
 
 <footer class="cta bg-dark on-dark">
@@ -12,16 +14,16 @@ import Shapes from './Shapes.astro';
     ]}
   />
   <div class="container cta__inner">
-    <h2 class="cta__title">Let's work together</h2>
-    <p class="cta__sub">Research collaborations, internships, or a product worth building.</p>
+    <h2 class="cta__title">{site.ctaTitle}</h2>
+    {site.ctaSubtitle && <p class="cta__sub">{site.ctaSubtitle}</p>}
     <a class="btn btn--white cta__email" href={`mailto:${site.email}`}>{site.email}</a>
 
     <div class="cta__foot">
-      <p>© 2026 {site.name} · {site.location}</p>
+      <p>© {new Date().getFullYear()} {site.name}{site.location && ` · ${site.location}`}</p>
       <div class="cta__links">
-        <a href={site.linkedin} target="_blank" rel="noopener">LinkedIn</a>
-        <a href={site.github} target="_blank" rel="noopener">GitHub</a>
-        <a class="cta__resume" href={site.resume.href} data-resume-open>Résumé</a>
+        <a href={site.linkedin ?? '#'} target="_blank" rel="noopener">LinkedIn</a>
+        <a href={site.github ?? '#'} target="_blank" rel="noopener">GitHub</a>
+        <a class="cta__resume" href={site.resume} data-resume-open>Résumé</a>
       </div>
     </div>
   </div>

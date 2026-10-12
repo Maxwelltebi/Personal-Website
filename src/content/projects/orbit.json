@@ -1,0 +1,18 @@
+{
+  "title": "Orbit",
+  "order": 40,
+  "badge": "In progress",
+  "summary": "A journaling app that sorts your thoughts into bubbles by theme, in your own words. The model runs on your phone, so your journal never leaves it.",
+  "stack": "Gemma 3 270M · LoRA · LiteRT",
+  "categories": [
+    "AI",
+    "Mobile"
+  ],
+  "screenshot": null,
+  "codeUrl": "",
+  "demoUrl": "",
+  "problem": "",
+  "built": "",
+  "results": "",
+  "next": ""
+}

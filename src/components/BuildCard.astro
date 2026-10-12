@@ -1,22 +1,28 @@
 ---
-import type { Build } from '../data/innovations';
+import { href, type Project } from '../lib/content';
 
 interface Props {
-  build: Build;
+  build: Project;
 }
 
 const { build } = Astro.props;
 ---
 
 <article class="card" data-categories={build.categories.join('|')}>
-  <div class="placeholder card__shot">[Add screenshot]</div>
+  {
+    build.screenshot ? (
+      <img class="card__shot" src={build.screenshot} alt={`${build.title} screenshot`} loading="lazy" />
+    ) : (
+      <div class="placeholder card__shot">[Add screenshot]</div>
+    )
+  }
   <div class="card__body">
-    <span class="tag card__badge">{build.badge}</span>
+    {build.badge && <span class="tag card__badge">{build.badge}</span>}
     <h3 class="card__title">{build.title}</h3>
-    <p class="card__text">{build.body}</p>
+    <p class="card__text">{build.summary}</p>
     <p class="stack card__stack">{build.stack}</p>
     <div class="card__links">
-      <a class="link-u" href={build.code}>Code ↗</a>
+      <a class="link-u" href={href(build.codeUrl)}>Code ↗</a>
       <a class="link-u" href={`/innovations/${build.slug}`}>Case study ↗</a>
     </div>
   </div>
@@ -33,7 +39,9 @@ const { build } = Astro.props;
   }
 
   .card__shot {
+    width: 100%;
     height: 190px;
+    object-fit: cover;
     transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   }
 

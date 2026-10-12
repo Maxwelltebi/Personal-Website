@@ -1,10 +1,6 @@
 ---
 title: '[Post title]'
 summary: '[One-line summary]'
-category: 'Research'
-date: '[Date]'
-readTime: '[X]'
-order: 1
+category: Research
 ---
-
 [Write your post here.]

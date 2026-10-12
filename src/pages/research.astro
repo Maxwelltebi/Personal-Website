@@ -1,7 +1,9 @@
 ---
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
-import { areas, papers } from '../data/research';
+import { getResearch, href } from '../lib/content';
+
+const { heroTitle, heroLead, heroBody, areas, papers } = await getResearch();
 
 const statusClass = {
   solid: 'tag--solid',
@@ -13,9 +15,9 @@ const statusClass = {
 
 <Base title="Research">
   <PageHero
-    title="My research"
-    lead="I research to discover what's true, then test whether it holds."
-    body="Applied machine learning and statistics, aimed at problems in healthcare, finance and climate risk. Most of it starts close to home."
+    title={heroTitle}
+    lead={heroLead}
+    body={heroBody}
     shapes={[
       { type: 'circle', top: '9%', left: '4%', size: 64 },
       { type: 'circle', top: '24%', left: '67.5%', size: 22, desktop: true },
@@ -28,9 +30,9 @@ const statusClass = {
   <section class="bg-dark on-dark">
     <div class="container areas">
       {
-        areas.map((a) => (
+        areas.map((a, i) => (
           <article class="area">
-            <p class="eyebrow area__num">{a.num}</p>
+            <p class="eyebrow area__num">{String(i + 1).padStart(2, '0')}</p>
             <h2 class="area__title">{a.title}</h2>
             <p class="area__body">{a.body}</p>
           </article>
@@ -51,20 +53,20 @@ const statusClass = {
       <ol class="rule-list">
         {
           papers.map((p) => (
-            <li class="paper" id={p.id}>
+            <li class="paper" id={p.anchor || undefined}>
               <div class="paper__when">
                 <p class="paper__year">{p.year}</p>
                 <p class="paper__where">{p.where}</p>
-                <span class:list={['tag', statusClass[p.status.style]]}>{p.status.label}</span>
+                {p.statusLabel && <span class:list={['tag', statusClass[p.statusStyle]]}>{p.statusLabel}</span>}
               </div>
               <div>
                 <h3 class="paper__title">{p.title}</h3>
                 <p class="body paper__body">{p.body}</p>
-                <p class="stack stack--caps paper__stack">{p.stack.join(' · ')}</p>
+                {p.tags.length > 0 && <p class="stack stack--caps paper__stack">{p.tags.join(' · ')}</p>}
                 {p.links.length > 0 && (
                   <div class="paper__links">
                     {p.links.map((l) => (
-                      <a class="link-u" href={l.href}>
+                      <a class="link-u" href={href(l.url)}>
                         {l.label} {l.arrow}
                       </a>
                     ))}

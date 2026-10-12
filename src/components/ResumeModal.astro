@@ -1,8 +1,11 @@
 ---
-import { site } from '../data/site';
+import { getSite } from '../lib/content';
 import Icon from './Icon.astro';
 
-const { href, file, pages } = site.resume;
+const site = await getSite();
+const href = site.resume;
+const file = site.resumeFileName || 'Resume.pdf';
+const pages = site.resumePages ?? 1;
 ---
 
 <dialog class="resume" id="resume-modal" aria-labelledby="resume-title" data-src={href}>
@@ -10,7 +13,7 @@ const { href, file, pages } = site.resume;
     <header class="resume__head">
       <div>
         <h2 class="resume__title" id="resume-title">Résumé</h2>
-        <p class="resume__file">{file} · {pages} page</p>
+        <p class="resume__file">{file} · {pages} {pages === 1 ? 'page' : 'pages'}</p>
       </div>
       <div class="resume__actions">
         <a class="btn btn--solid" href={href} download={file}>Download</a>

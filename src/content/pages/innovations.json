@@ -1,0 +1,19 @@
+{
+  "heroTitle": "My innovations",
+  "heroLead": "Research is the start. Software is how it ships.",
+  "heroBody": "Apps and systems I designed and built end to end, from the model or the database up to the screen someone taps.",
+  "featured": {
+    "tag": "Featured",
+    "note": "Moving to React Native + Expo",
+    "title": "LC Shuttle System",
+    "lead": "Livingstone's shuttles ran on fixed schedules. Miss the window and you wait. I ride them a lot, so I built a system that shows every shuttle live.",
+    "points": [
+      "Live positions over WebSockets for students and drivers",
+      "OpenStreetMap and Leaflet map, JWT auth, Node.js APIs",
+      "Next: a mobile app with push alerts and phone location"
+    ],
+    "stack": "React · Node.js · MongoDB · WebSockets · React Native",
+    "codeUrl": "",
+    "demoUrl": ""
+  }
+}

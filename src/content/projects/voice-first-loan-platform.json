@@ -1,0 +1,19 @@
+{
+  "title": "Voice-First Loan Platform",
+  "order": 30,
+  "badge": "In progress",
+  "summary": "Micro-loans for farmers and traders, including people who cannot read. Voice-first, usable offline, and scores credit from MoMo statements, guarantors and psychometric signals.",
+  "stack": "Gemini API · Smile Identity · Offline-first",
+  "categories": [
+    "AI",
+    "Finance",
+    "Mobile"
+  ],
+  "screenshot": null,
+  "codeUrl": "",
+  "demoUrl": "",
+  "problem": "",
+  "built": "",
+  "results": "",
+  "next": ""
+}

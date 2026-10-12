@@ -1,6 +1,6 @@
 ---
 interface Props {
-  facts: { label: string; value: string }[];
+  facts: readonly { label: string; value: string }[];
 }
 
 const { facts } = Astro.props;

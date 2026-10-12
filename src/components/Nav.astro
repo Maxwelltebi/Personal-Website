@@ -1,7 +1,9 @@
 ---
-import { nav, site } from '../data/site';
+import { nav } from '../lib/nav';
+import { getSite } from '../lib/content';
 import Icon from './Icon.astro';
 
+const site = await getSite();
 const path = Astro.url.pathname.replace(/\/$/, '') || '/';
 const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWith(href));
 ---
@@ -21,13 +23,13 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
     </nav>
 
     <div class="nav__actions">
-      <a class="nav__icon" href={site.github} target="_blank" rel="noopener" aria-label="GitHub">
+      <a class="nav__icon" href={site.github ?? '#'} target="_blank" rel="noopener" aria-label="GitHub">
         <Icon name="github" />
       </a>
-      <a class="nav__icon" href={site.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn">
+      <a class="nav__icon" href={site.linkedin ?? '#'} target="_blank" rel="noopener" aria-label="LinkedIn">
         <Icon name="linkedin" />
       </a>
-      <a class="btn btn--solid btn--sm nav__resume" href={site.resume.href} data-resume-open>Résumé</a>
+      <a class="btn btn--solid btn--sm nav__resume" href={site.resume} data-resume-open>Résumé</a>
       <button class="nav__toggle" type="button" aria-expanded="false" aria-controls="mobile-menu" aria-label="Open menu">
         <span class="nav__toggle-open"><Icon name="menu" size={24} /></span>
         <span class="nav__toggle-close"><Icon name="close" size={24} /></span>
@@ -46,11 +48,11 @@ const isActive = (href: string) => (href === '/' ? path === '/' : path.startsWit
       }
     </nav>
     <div class="container mobile-menu__foot">
-      <a class="btn btn--solid" href={site.resume.href} data-resume-open>Résumé</a>
-      <a class="nav__icon" href={site.github} target="_blank" rel="noopener" aria-label="GitHub">
+      <a class="btn btn--solid" href={site.resume} data-resume-open>Résumé</a>
+      <a class="nav__icon" href={site.github ?? '#'} target="_blank" rel="noopener" aria-label="GitHub">
         <Icon name="github" size={20} />
       </a>
-      <a class="nav__icon" href={site.linkedin} target="_blank" rel="noopener" aria-label="LinkedIn">
+      <a class="nav__icon" href={site.linkedin ?? '#'} target="_blank" rel="noopener" aria-label="LinkedIn">
         <Icon name="linkedin" size={20} />
       </a>
     </div>

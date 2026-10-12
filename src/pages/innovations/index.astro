@@ -3,14 +3,19 @@ import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import ShuttleMap from '../../components/ShuttleMap.astro';
 import BuildCard from '../../components/BuildCard.astro';
-import { featured, filters, builds } from '../../data/innovations';
+import { getInnovations, getProjects, href, demoLabel } from '../../lib/content';
+import { buildCategories } from '../../lib/categories';
+
+const { heroTitle, heroLead, heroBody, featured } = await getInnovations();
+const builds = await getProjects();
+const filters = ['All', ...buildCategories];
 ---
 
 <Base title="Innovations">
   <PageHero
-    title="My innovations"
-    lead="Research is the start. Software is how it ships."
-    body="Apps and systems I designed and built end to end, from the model or the database up to the screen someone taps."
+    title={heroTitle}
+    lead={heroLead}
+    body={heroBody}
     shapes={[
       { type: 'circle', top: '8%', left: '3.5%', size: 22 },
       { type: 'circle', top: '23%', left: '68%', size: 285, desktop: true },
@@ -22,11 +27,11 @@ import { featured, filters, builds } from '../../data/innovations';
 
   <section class="section">
     <div class="container">
-      <article class="featured" id={featured.id}>
+      <article class="featured" id="lc-shuttle">
         <div class="featured__text">
           <div class="featured__tags">
-            <span class="tag tag--solid">{featured.tags[0]}</span>
-            <span class="tag tag--light">{featured.tags[1]}</span>
+            {featured.tag && <span class="tag tag--solid">{featured.tag}</span>}
+            {featured.note && <span class="tag tag--light">{featured.note}</span>}
           </div>
           <h2 class="featured__title">{featured.title}</h2>
           <p class="featured__lead">{featured.lead}</p>
@@ -35,8 +40,8 @@ import { featured, filters, builds } from '../../data/innovations';
           </ul>
           <p class="stack featured__stack">{featured.stack}</p>
           <div class="featured__actions">
-            <a class="btn btn--solid" href={featured.code}>View code</a>
-            <a class="btn" href={featured.demo}>Live demo [Add link]</a>
+            <a class="btn btn--solid" href={href(featured.codeUrl)}>View code</a>
+            <a class="btn" href={href(featured.demoUrl)}>{demoLabel(featured.demoUrl)}</a>
           </div>
         </div>
         <div class="featured__map">

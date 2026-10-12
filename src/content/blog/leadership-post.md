@@ -1,10 +1,6 @@
 ---
 title: '[Post title]'
 summary: '[One-line summary]'
-category: 'Leadership'
-date: '[Date]'
-readTime: '[X]'
-order: 3
+category: Leadership
 ---
-
 [Write your post here.]

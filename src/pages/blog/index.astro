@@ -1,19 +1,23 @@
 ---
-import { getCollection } from 'astro:content';
 import Base from '../../layouts/Base.astro';
 import PageHero from '../../components/PageHero.astro';
 import RowList from '../../components/RowList.astro';
+import { getBlogPage } from '../../lib/content';
+import { postCategories } from '../../lib/categories';
+import { getPosts, categoryLabel, dateLabel, readTime, metaLine } from '../../lib/blog';
 
-const filters = ['All', 'Research', 'Engineering', 'Leadership', 'Notes'];
+const page = await getBlogPage();
+const filters = ['All', ...postCategories];
 
-const posts = (await getCollection('blog')).sort((a, b) => a.data.order - b.data.order);
+const posts = await getPosts();
+// The newest post ticked "Featured" gets the big card.
 const featured = posts.find((p) => p.data.featured);
 const latest = posts
   .filter((p) => p !== featured)
   .map((p) => ({
-    eyebrow: p.data.category,
+    eyebrow: categoryLabel(p),
     title: p.data.title,
-    meta: `${p.data.summary} · ${p.data.date} · ${p.data.readTime} min read`,
+    meta: metaLine(p),
     href: `/blog/${p.id}`,
     categories: p.data.category,
   }));
@@ -21,9 +25,9 @@ const latest = posts
 
 <Base title="Blog">
   <PageHero
-    title="Blog"
-    lead="Notes from the bench."
-    body="Write-ups on research I'm running, things I've built, and what I learn leading student communities."
+    title={page.heroTitle}
+    lead={page.heroLead}
+    body={page.heroBody}
     shapes={[
       { type: 'circle', top: '7%', left: '4%', size: 64 },
       { type: 'circle', top: '37%', left: '45.5%', size: 22, desktop: true },
@@ -44,11 +48,11 @@ const latest = posts
               <div class="placeholder featured__cover">[Cover image]</div>
             )}
             <div class="featured__text">
-              <span class="tag tag--solid featured__tag">Featured · {featured.data.category}</span>
+              <span class="tag tag--solid featured__tag">Featured · {categoryLabel(featured)}</span>
               <h2 class="featured__title">{featured.data.title}</h2>
               <p class="featured__summary">{featured.data.summary}</p>
               <p class="featured__meta">
-                {featured.data.date} · {featured.data.readTime} min read
+                {dateLabel(featured)} · {readTime(featured)} min read
               </p>
               <span class="link-arrow featured__cta">Read post →</span>
             </div>

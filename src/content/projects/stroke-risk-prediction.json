@@ -1,0 +1,18 @@
+{
+  "title": "Stroke Risk Prediction",
+  "order": 20,
+  "badge": "94% accuracy",
+  "summary": "A neural network trained on 4,908 patient records, with SMOTE and class weighting for imbalance. A Streamlit app runs the saved pipeline and returns live risk probabilities.",
+  "stack": "TensorFlow · scikit-learn · Streamlit",
+  "categories": [
+    "AI",
+    "Healthcare"
+  ],
+  "screenshot": null,
+  "codeUrl": "",
+  "demoUrl": "",
+  "problem": "",
+  "built": "",
+  "results": "",
+  "next": ""
+}

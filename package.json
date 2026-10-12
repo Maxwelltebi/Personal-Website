@@ -10,14 +10,23 @@
     "check": "astro check"
   },
   "dependencies": {
+    "@astrojs/react": "^7.0.1",
+    "@astrojs/vercel": "^11.0.13",
     "@fontsource/montserrat": "^5.3.0",
     "@fontsource/raleway": "^5.3.0",
+    "@keystatic/astro": "^6.0.0",
+    "@keystatic/core": "^0.6.9",
     "astro": "^7.3.8",
     "gsap": "^3.15.0",
-    "pdfjs-dist": "^6.4.299"
+    "pdfjs-dist": "^6.4.299",
+    "react": "^19.3.0",
+    "react-dom": "^19.3.0"
   },
   "devDependencies": {
     "@astrojs/check": "^0.9.10",
+    "@types/node": "^26.6.5",
+    "@types/react": "^19.3.0",
+    "@types/react-dom": "^19.3.0",
     "typescript": "^6.0.3"
   }
 }

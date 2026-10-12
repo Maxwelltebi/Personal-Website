@@ -2,17 +2,16 @@
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import FactsBar from '../components/FactsBar.astro';
-import { facts, education, experience, toolkit } from '../data/about';
+import { getAbout } from '../lib/content';
+
+const { heroTitle, heroLead, heroBody, facts, education, experience, toolkit } = await getAbout();
 ---
 
 <Base title="About Me">
   <PageHero
-    title="About me"
-    lead="From Keta, Ghana to Salisbury, North Carolina"
-    body={[
-      "I grew up in Keta, a town on Ghana's coast that the sea has been taking back for decades. That taught me a good question is only worth something if the answer reaches the people living with the problem.",
-      'Today I study Computer Science with a minor in Mathematics at Livingstone College. As a researcher I use machine learning and statistics to find out what is true. As an engineer I turn those findings into software people open.',
-    ]}
+    title={heroTitle}
+    lead={heroLead}
+    body={heroBody}
     photo
     shapes={[
       { type: 'circle', top: '14%', left: '3.5%', size: 22 },

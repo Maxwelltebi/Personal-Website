@@ -1,14 +1,16 @@
 ---
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
-import { ciren, roles } from '../data/leadership';
+import { getLeadership } from '../lib/content';
+
+const { heroTitle, heroLead, heroBody, ciren, roles } = await getLeadership();
 ---
 
 <Base title="Leadership">
   <PageHero
-    title="My leadership"
-    lead="I build rooms where other people start building."
-    body="Hackathons, clubs, journal clubs and workshops. The goal is the same each time: put research and real tools in front of students who would otherwise wait years for the chance."
+    title={heroTitle}
+    lead={heroLead}
+    body={heroBody}
     shapes={[
       { type: 'circle', top: '16%', left: '3.7%', size: 22 },
       { type: 'line', top: '26%', left: '43.5%', size: 180, angle: -30, desktop: true },

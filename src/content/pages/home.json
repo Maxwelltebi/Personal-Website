@@ -1,0 +1,63 @@
+{
+  "heroTitle": "Hi, I'm\nMaxwell\nTebi",
+  "heroLead": "I am an Innovator & Researcher",
+  "heroBody": "I research to discover, but I don't stop there. I turn what I find into products people can use. Computer Science major, Mathematics minor, Livingstone College. Research in applied machine learning and AI for healthcare and finance.",
+  "tracks": [
+    {
+      "title": "Research",
+      "lead": "I research to discover.",
+      "body": "Applied machine learning and AI in healthcare and finance, plus climate risk work on Ghana's coast. Flood forecasting, stroke risk, youth public health.",
+      "linkLabel": "Read my research",
+      "linkUrl": "/research",
+      "shape": "circle"
+    },
+    {
+      "title": "Innovation",
+      "lead": "Then I build it.",
+      "body": "Software engineer working in FastAPI, JavaScript, TypeScript, Node.js, React and React Native. A live campus shuttle system, a lab-results explainer in English and Twi, ML apps that serve real predictions.",
+      "linkLabel": "See my innovations",
+      "linkUrl": "/innovations",
+      "shape": "square"
+    }
+  ],
+  "stats": [
+    {
+      "value": "3.94",
+      "label": "GPA · Presidential Scholar"
+    },
+    {
+      "value": "#1",
+      "label": "Research project of 49 teams, AUCC PFx 2026"
+    },
+    {
+      "value": "93%",
+      "label": "Accuracy, LSTM flood-risk classifier"
+    },
+    {
+      "value": "200+",
+      "label": "Students reached through CIReN"
+    }
+  ],
+  "selectedWork": [
+    {
+      "title": "Flood-Risk Forecasting with LSTMs",
+      "meta": "Youth In AI Research Lab · Python, Google Earth Engine · 93% accuracy",
+      "url": "/research#flood-risk"
+    },
+    {
+      "title": "LC Shuttle System",
+      "meta": "Real-time campus shuttle tracking · React, Node.js, MongoDB, WebSockets",
+      "url": "/innovations#lc-shuttle"
+    },
+    {
+      "title": "Stroke Risk Prediction App",
+      "meta": "4,908 patient records · TensorFlow, Streamlit · 94% accuracy",
+      "url": "/innovations/stroke-risk-prediction"
+    },
+    {
+      "title": "BioBrief",
+      "meta": "Lab results explained in English and Twi · 3rd place, Claude Builder Hackathon",
+      "url": "/innovations/biobrief"
+    }
+  ]
+}

@@ -2,16 +2,19 @@
 import Base from '../layouts/Base.astro';
 import PageHero from '../components/PageHero.astro';
 import RowList from '../components/RowList.astro';
-import { site } from '../data/site';
-import { tracks, stats, selectedWork } from '../data/home';
+import { getHome, getSite, href } from '../lib/content';
+
+const site = await getSite();
+const home = await getHome();
+const selectedWork = home.selectedWork.map((w) => ({ title: w.title, meta: w.meta, href: href(w.url) }));
 ---
 
 <Base>
   <PageHero
-    title="Hi, I'm<br />Maxwell<br />Tebi"
+    title={home.heroTitle}
     size="xl"
-    lead="I am an Innovator & Researcher"
-    body="I research to discover, but I don't stop there. I turn what I find into products people can use. Computer Science major, Mathematics minor, Livingstone College. Research in applied machine learning and AI for healthcare and finance."
+    lead={home.heroLead}
+    body={home.heroBody}
     photo
     shapes={[
       { type: 'circle', top: '4%', left: '6%', size: 64 },
@@ -23,12 +26,12 @@ import { tracks, stats, selectedWork } from '../data/home';
     ]}
   >
     <div class="hero-actions">
-      <a class="btn btn--solid" href={site.resume.href} data-resume-open>View my résumé</a>
+      <a class="btn btn--solid" href={site.resume} data-resume-open>View my résumé</a>
       <a class="btn" href={`mailto:${site.email}`}>Hire me</a>
     </div>
     <div class="hero-links">
-      <a href={site.linkedin} target="_blank" rel="noopener">LinkedIn ↗</a>
-      <a href={site.github} target="_blank" rel="noopener">GitHub ↗</a>
+      <a href={site.linkedin ?? '#'} target="_blank" rel="noopener">LinkedIn ↗</a>
+      <a href={site.github ?? '#'} target="_blank" rel="noopener">GitHub ↗</a>
     </div>
   </PageHero>
 
@@ -41,16 +44,18 @@ import { tracks, stats, selectedWork } from '../data/home';
 
       <div class="tracks">
         {
-          tracks.map((t) => (
+          home.tracks.map((t, i) => (
             <article class="track">
               <span class:list={['track__shape', `track__shape--${t.shape}`]} data-shape={t.shape} aria-hidden="true" />
-              <p class="eyebrow track__num">{t.num}</p>
+              <p class="eyebrow track__num">{String(i + 1).padStart(2, '0')}</p>
               <h3 class="track__title">{t.title}</h3>
               <p class="track__lead">{t.lead}</p>
               <p class="body track__body">{t.body}</p>
-              <a class="link-arrow track__cta" href={t.cta.href}>
-                {t.cta.label} →
-              </a>
+              {t.linkLabel && (
+                <a class="link-arrow track__cta" href={href(t.linkUrl)}>
+                  {t.linkLabel} →
+                </a>
+              )}
             </article>
           ))
         }
@@ -61,7 +66,7 @@ import { tracks, stats, selectedWork } from '../data/home';
   <section class="section bg-grey stats-band">
     <div class="container stats">
       {
-        stats.map((s) => (
+        home.stats.map((s) => (
           <div class="stat">
             <p class="stat__value">{s.value}</p>
             <p class="stat__label">{s.label}</p>

@@ -4,7 +4,7 @@ import Shapes, { type Shape } from './Shapes.astro';
 interface Props {
   title: string;
   lead?: string;
-  body?: string | string[];
+  body?: string | readonly string[];
   shapes?: Shape[];
   /** Show the headshot on the right, sitting on the bottom edge of the hero. */
   photo?: boolean;
@@ -12,9 +12,12 @@ interface Props {
 }
 
 const { title, lead, body, shapes = [], photo = false, size = 'lg' } = Astro.props;
-const paragraphs = body ? (Array.isArray(body) ? body : [body]) : [];
+const paragraphs = (Array.isArray(body) ? body : [body]).filter((p): p is string => !!p?.trim());
 // Each title line sits in its own mask so the entrance can slide it up from behind the edge.
-const lines = title.split(/<br\s*\/?>/i).map((l) => l.trim());
+const lines = title
+  .split(/\r?\n|<br\s*\/?>/i)
+  .map((l) => l.trim())
+  .filter(Boolean);
 ---
 
 <section class:list={['hero', 'bg-grey', { 'hero--photo': photo }]}>
