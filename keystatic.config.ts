@@ -46,7 +46,9 @@ const textList = (label: string, itemLabel = 'Item') =>
 /* ---------------------------------------------------------------- config */
 
 export default config({
-  storage: import.meta.env.DEV
+  // Local files while developing; GitHub on the live site. Set PUBLIC_KEYSTATIC_STORAGE=github
+  // to use GitHub locally too (needed once, to create the GitHub App).
+  storage: import.meta.env.DEV && import.meta.env.PUBLIC_KEYSTATIC_STORAGE !== 'github'
     ? { kind: 'local' }
     : { kind: 'github', repo: { owner: 'Maxwelltebi', name: 'Personal-Website' } },
 
