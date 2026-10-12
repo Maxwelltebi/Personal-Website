@@ -42,6 +42,8 @@ const { rows, numbered = false } = Astro.props;
 
 <style>
   .row {
+    position: relative;
+    isolation: isolate;
     display: grid;
     grid-template-columns: minmax(0, 1fr) auto;
     align-items: center;
@@ -81,12 +83,51 @@ const { rows, numbered = false } = Astro.props;
     font-size: 13px;
   }
 
-  .row__arrow {
-    transition: transform 0.2s;
+  .row::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    z-index: -1;
+    background: var(--black);
+    transform: scaleX(0);
+    transform-origin: right center;
+    transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
-  .row:hover .row__arrow {
-    transform: translate(3px, -3px);
+  .row__text,
+  .row__num,
+  .row__arrow {
+    transition: transform 0.55s cubic-bezier(0.16, 1, 0.3, 1), color 0.3s;
+  }
+
+  .row__eyebrow,
+  .row__meta {
+    transition: color 0.3s;
+  }
+
+  @media (hover: hover) {
+    .row:hover {
+      color: var(--white);
+    }
+
+    .row:hover::before {
+      transform: scaleX(1);
+      transform-origin: left center;
+    }
+
+    .row:hover .row__text {
+      transform: translateX(12px);
+    }
+
+    .row:hover .row__num,
+    .row:hover .row__eyebrow,
+    .row:hover .row__meta {
+      color: var(--on-dark-muted);
+    }
+
+    .row:hover .row__arrow {
+      transform: translate(-6px, -3px) rotate(45deg);
+    }
   }
 
   @media (max-width: 560px) {

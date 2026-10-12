@@ -1,7 +1,9 @@
 ---
 /**
  * Decorative outline shapes (circles, squares, diagonal lines) used across heroes and CTAs.
- * Each shape is its own element with data-shape so it can be animated later.
+ * Each shape has two layers so two motions can run at once without fighting:
+ *   .shape-wrap  → positioned here, moved by mouse parallax (data-depth)
+ *   .shape       → the visible outline, given an ambient drift
  * Positions are percentages of the parent; size is in px.
  */
 export type Shape = {
@@ -21,23 +23,28 @@ interface Props {
 }
 
 const { shapes, tone = 'light' } = Astro.props;
+// Bigger shapes move less, which reads as further away.
+const depth = (s: Shape) => (s.type === 'line' ? 0.4 : Math.max(0.25, Math.min(1, 40 / s.size + 0.2))).toFixed(2);
 ---
 
 <div class:list={['shapes', `shapes--${tone}`]} aria-hidden="true">
   {
     shapes.map((s) => (
       <span
-        class:list={['shape', `shape--${s.type}`, { 'shape--desktop': s.desktop }]}
-        data-shape={s.type}
-        style={{
-          top: s.top,
-          left: s.left,
-          right: s.right,
-          width: `${s.size}px`,
-          height: s.type === 'line' ? undefined : `${s.size}px`,
-          transform: s.angle ? `rotate(${s.angle}deg)` : undefined,
-        }}
-      />
+        class:list={['shape-wrap', { 'shape--desktop': s.desktop }]}
+        data-depth={depth(s)}
+        style={{ top: s.top, left: s.left, right: s.right }}
+      >
+        <span
+          class:list={['shape', `shape--${s.type}`]}
+          data-shape={s.type}
+          style={{
+            width: `${s.size}px`,
+            height: s.type === 'line' ? undefined : `${s.size}px`,
+            '--angle': `${s.angle ?? 0}deg`,
+          }}
+        />
+      </span>
     ))
   }
 </div>
@@ -50,8 +57,11 @@ const { shapes, tone = 'light' } = Astro.props;
     overflow: hidden;
   }
 
-  .shape {
+  .shape-wrap {
     position: absolute;
+  }
+
+  .shape {
     display: block;
     border: 1.5px solid var(--line);
     opacity: 0.85;
@@ -69,6 +79,7 @@ const { shapes, tone = 'light' } = Astro.props;
     height: 0;
     border-width: 1.5px 0 0;
     transform-origin: left center;
+    transform: rotate(var(--angle));
   }
 
   @media (max-width: 720px) {

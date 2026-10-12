@@ -43,7 +43,9 @@ const more = (await getCollection('blog'))
     <p class="meta">{date} · {readTime} min read</p>
   </PageHero>
 
-  <article class="section">
+  <div class="progress" data-reading-progress aria-hidden="true"></div>
+
+  <article class="section" data-article>
     <div class="container article">
       {
         cover ? (
@@ -77,6 +79,18 @@ const more = (await getCollection('blog'))
 </Base>
 
 <style>
+  .progress {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 50;
+    height: 3px;
+    background: var(--black);
+    transform: scaleX(0);
+    transform-origin: left center;
+  }
+
   .kicker {
     display: flex;
     flex-wrap: wrap;

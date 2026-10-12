@@ -41,6 +41,10 @@ const { href, file, pages } = site.resume;
   // phones included. pdf.js is only downloaded the first time the résumé is opened.
   async function renderPdf() {
     if (!dialog || !pagesEl) return;
+    // Reset in case an earlier attempt failed and this is a retry.
+    pagesEl.replaceChildren();
+    pagesEl.hidden = false;
+    if (fallback) fallback.hidden = true;
     try {
       const pdfjs = await import('pdfjs-dist');
       const worker = await import('pdfjs-dist/build/pdf.worker.min.mjs?url');
@@ -63,6 +67,7 @@ const { href, file, pages } = site.resume;
         pagesEl.append(canvas);
         await page.render({ canvas, viewport }).promise;
       }
+      pagesEl.dataset.ready = 'true';
     } catch (err) {
       console.error(err);
       rendered = null;
@@ -113,6 +118,27 @@ const { href, file, pages } = site.resume;
 
   .resume::backdrop {
     background: rgba(17, 17, 17, 0.72);
+  }
+
+  :global(html.motion) .resume[open] {
+    animation: resume-in 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  :global(html.motion) .resume[open]::backdrop {
+    animation: resume-fade 0.4s ease-out;
+  }
+
+  @keyframes resume-in {
+    from {
+      opacity: 0;
+      transform: translateY(24px) scale(0.97);
+    }
+  }
+
+  @keyframes resume-fade {
+    from {
+      opacity: 0;
+    }
   }
 
   .resume__panel {

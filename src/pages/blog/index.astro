@@ -89,8 +89,17 @@ const latest = posts
   .featured {
     display: grid;
     grid-template-columns: repeat(2, minmax(0, 1fr));
+    overflow: hidden;
     border: 1px solid var(--black);
     text-decoration: none;
+  }
+
+  .featured__cover {
+    transition: transform 0.9s cubic-bezier(0.16, 1, 0.3, 1);
+  }
+
+  .featured:hover .featured__cover {
+    transform: scale(1.04);
   }
 
   .featured__cover {
@@ -136,10 +145,11 @@ const latest = posts
     display: inline-block;
     margin-top: 22px;
     font-size: 11px;
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   }
 
   .featured:hover .featured__cta {
-    opacity: 0.65;
+    transform: translateX(8px);
   }
 
   @media (max-width: 860px) {

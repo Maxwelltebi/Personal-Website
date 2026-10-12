@@ -123,9 +123,14 @@ import { ciren, roles } from '../data/leadership';
   }
 
   .ciren__stat {
+    transition: background 0.3s;
     padding: 30px clamp(18px, 2vw, 30px);
     border-right: 1px solid var(--dark-line);
     border-bottom: 1px solid var(--dark-line);
+  }
+
+  .ciren__stat:hover {
+    background: #1b1b1b;
   }
 
   .ciren__stat:nth-child(2n) {
@@ -188,6 +193,14 @@ import { ciren, roles } from '../data/leadership';
     flex-direction: column;
     padding: clamp(26px, 2.8vw, 40px);
     border: 1px solid var(--border);
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s;
+  }
+
+  @media (hover: hover) {
+    .role:hover {
+      transform: translateY(-5px);
+      border-color: var(--black);
+    }
   }
 
   .role__org {

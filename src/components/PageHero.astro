@@ -13,26 +13,32 @@ interface Props {
 
 const { title, lead, body, shapes = [], photo = false, size = 'lg' } = Astro.props;
 const paragraphs = body ? (Array.isArray(body) ? body : [body]) : [];
+// Each title line sits in its own mask so the entrance can slide it up from behind the edge.
+const lines = title.split(/<br\s*\/?>/i).map((l) => l.trim());
 ---
 
 <section class:list={['hero', 'bg-grey', { 'hero--photo': photo }]}>
   <Shapes shapes={shapes} />
   <div class="container hero__inner">
     <div class="hero__text">
-      <slot name="kicker" />
-      <h1 class:list={['display', `hero__title--${size}`]} set:html={title} />
-      {lead && <p class="lead hero__lead">{lead}</p>}
-      {paragraphs.map((p) => <p class="body hero__body">{p}</p>)}
-      <slot />
+      {Astro.slots.has('kicker') && <div data-hero-item><slot name="kicker" /></div>}
+      <h1 class:list={['display', `hero__title--${size}`]} data-hero-title>
+        {lines.map((l) => <span class="line"><span class="line__inner" set:html={l} /></span>)}
+      </h1>
+      {lead && <p class="lead hero__lead" data-hero-item>{lead}</p>}
+      {paragraphs.map((p) => <p class="body hero__body" data-hero-item>{p}</p>)}
+      {Astro.slots.has('default') && <div data-hero-item><slot /></div>}
     </div>
     {
       photo && (
-        <div class="hero__photo">
+        <div class="hero__photo" data-hero-photo>
+          <span class="hero__halo" data-photo-halo aria-hidden="true" />
           <img
+            data-photo-img
             src="/images/headshot.webp"
             alt="Portrait of Maxwell Tebi"
-            width="512"
-            height="512"
+            width="1240"
+            height="1240"
             fetchpriority="high"
           />
         </div>
@@ -57,6 +63,18 @@ const paragraphs = body ? (Array.isArray(body) ? body : [body]) : [];
   .hero__text {
     position: relative;
     max-width: 760px;
+  }
+
+  .line {
+    display: block;
+    overflow: hidden;
+    /* Room for commas and descenders inside the mask. */
+    padding-bottom: 0.08em;
+    margin-bottom: -0.08em;
+  }
+
+  .line__inner {
+    display: block;
   }
 
   .hero__title--xl {
@@ -94,16 +112,33 @@ const paragraphs = body ? (Array.isArray(body) ? body : [body]) : [];
   }
 
   .hero__photo {
+    position: relative;
     align-self: end;
     justify-self: end;
     width: min(100%, 620px);
+    perspective: 1400px;
   }
 
   .hero__photo img {
+    position: relative;
     width: 100%;
     height: auto;
-    /* Blends the photo's light backdrop into the grey hero. */
-    mix-blend-mode: darken;
+    /* Hinged at the bottom edge so tilting keeps the photo anchored to the hero. */
+    transform-origin: 50% 100%;
+  }
+
+  /* Outline circle behind the head; appears and follows the cursor on hover (see motion.ts). */
+  .hero__halo {
+    position: absolute;
+    top: 6%;
+    left: 50%;
+    width: 64%;
+    aspect-ratio: 1;
+    margin-left: -32%;
+    border: 1.5px solid var(--line);
+    border-radius: 50%;
+    opacity: 0;
+    pointer-events: none;
   }
 
   @media (max-width: 860px) {

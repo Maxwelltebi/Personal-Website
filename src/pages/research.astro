@@ -89,6 +89,21 @@ const statusClass = {
   .area {
     padding: 48px clamp(24px, 3vw, 40px) 52px;
     border-left: 1px solid var(--dark-line);
+    transition: background 0.4s;
+  }
+
+  .area__num,
+  .area__body {
+    transition: color 0.4s;
+  }
+
+  .area:hover {
+    background: #1b1b1b;
+  }
+
+  .area:hover .area__num,
+  .area:hover .area__body {
+    color: var(--white);
   }
 
   .area:first-child {

@@ -122,6 +122,14 @@ import { facts, education, experience, toolkit } from '../data/about';
   .edu__card {
     padding: clamp(28px, 3vw, 44px);
     border: 1px solid var(--border);
+    transition: transform 0.5s cubic-bezier(0.16, 1, 0.3, 1), border-color 0.3s;
+  }
+
+  @media (hover: hover) {
+    .edu__card:hover {
+      transform: translateY(-5px);
+      border-color: var(--black);
+    }
   }
 
   .edu__card--current {
