@@ -34,12 +34,10 @@
       "links": [
         {
           "label": "Poster [ADD LINK]",
-          "url": "",
           "arrow": "↗"
         },
         {
           "label": "Code",
-          "url": "",
           "arrow": "↗"
         }
       ]
@@ -61,12 +59,10 @@
       "links": [
         {
           "label": "Write-up [ADD LINK]",
-          "url": "",
           "arrow": "↗"
         },
         {
           "label": "Code",
-          "url": "",
           "arrow": "↗"
         }
       ]
@@ -74,7 +70,7 @@
     {
       "title": "Stroke risk: which clinical and lifestyle factors matter most",
       "anchor": "stroke-risk",
-      "year": "[Year]",
+      "year": "2026",
       "where": "Independent project",
       "statusLabel": "Completed",
       "statusStyle": "outline",
@@ -87,12 +83,10 @@
       "links": [
         {
           "label": "See the app",
-          "url": "",
           "arrow": "→"
         },
         {
           "label": "Code",
-          "url": "",
           "arrow": "↗"
         }
       ]
@@ -109,35 +103,6 @@
         "CoastSat",
         "Sentinel-2 / Landsat",
         "Earth Engine"
-      ],
-      "links": []
-    },
-    {
-      "title": "Does the data's origin matter? Cassava disease classification",
-      "anchor": "cassava",
-      "year": "Ongoing",
-      "where": "Agricultural AI",
-      "statusLabel": "In progress",
-      "statusStyle": "soft",
-      "body": "A three-way factorial ablation comparing models trained on real African field data, Western data and LLM-generated synthetic data, to see what each source actually contributes.",
-      "tags": [
-        "Computer vision",
-        "Synthetic data",
-        "Ablation study"
-      ],
-      "links": []
-    },
-    {
-      "title": "Pen versus keyboard in Ghanaian universities",
-      "anchor": "pen-vs-keyboard",
-      "year": "Proposal",
-      "where": "Education research",
-      "statusLabel": "Seeking collaborators",
-      "statusStyle": "dashed",
-      "body": "Ghanaian high schools run on handwritten notes and exams. Universities run on typing. Building on Mueller and Oppenheimer's encoding hypothesis, this proposal sets out four study designs to test whether that switch affects academic performance.",
-      "tags": [
-        "Study design",
-        "Cognitive science"
       ],
       "links": []
     }
