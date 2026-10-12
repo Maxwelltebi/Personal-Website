@@ -1,20 +1,20 @@
 {
   "heroTitle": "Hi, I'm\nMaxwell\nTebi",
-  "heroLead": "I am an Innovator & Researcher",
-  "heroBody": "I research to discover, but I don't stop there. I turn what I find into products people can use. Computer Science major, Mathematics minor, Livingstone College. Research in applied AI and Machine Learning.",
+  "heroLead": "Computer Science student at Livingstone College",
+  "heroBody": "Minor in Mathematics. My research, the software I have built, the communities I lead and what I am learning, all in one place.",
   "tracks": [
     {
-      "title": "Research",
-      "lead": "I research to discover.",
-      "body": "Applied machine learning and AI in healthcare and finance, plus climate risk work on Ghana's coast. Flood forecasting, stroke risk, youth public health.",
+      "title": "My Research",
+      "lead": "Studies, papers and proposals.",
+      "body": "Applied machine learning and statistics in healthcare, finance and climate risk: flood forecasting, stroke risk and youth public health.",
       "linkLabel": "Read my research",
       "linkUrl": "/research",
       "shape": "circle"
     },
     {
-      "title": "Innovation",
-      "lead": "Then I build it.",
-      "body": "Software engineer working in FastAPI, JavaScript, TypeScript, Node.js, React and React Native. A live campus shuttle system, a lab-results explainer in English and Twi, ML apps that serve real predictions.",
+      "title": "My Innovations",
+      "lead": "Apps and systems, built end to end.",
+      "body": "A live campus shuttle system, a lab-results explainer in English and Twi, and ML apps that serve real predictions. Built with FastAPI, TypeScript, Node.js, React and React Native.",
       "linkLabel": "See my innovations",
       "linkUrl": "/innovations",
       "shape": "square"

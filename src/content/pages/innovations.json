@@ -1,7 +1,7 @@
 {
   "heroTitle": "My innovations",
-  "heroLead": "Research is the start. Software is how it ships.",
-  "heroBody": "Apps and systems I designed and built end to end, from the model or the database up to the screen someone taps.",
+  "heroLead": "Apps and systems I've designed and built.",
+  "heroBody": "Each one built end to end, from the model or the database up to the screen someone taps.",
   "featured": {
     "tag": "Featured",
     "note": "Moving to React Native + Expo",

@@ -117,7 +117,7 @@ export default config({
               defaultValue: 'circle',
             }),
           }),
-          { label: '"What I do" cards', itemLabel: (p) => p.fields.title.value },
+          { label: '"My work" cards', itemLabel: (p) => p.fields.title.value },
         ),
         stats: statList('Stats band'),
         selectedWork: fields.array(

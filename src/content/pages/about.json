@@ -2,17 +2,13 @@
   "heroTitle": "About me",
   "heroLead": "Located in Salisbury, North Carolina",
   "heroBody": [
-    "I grew up in Keta, a town on Ghana's coast that the sea has been taking back for decades. That taught me a good question is only worth something if the answer reaches the people living with the problem.",
-    "Today I study Computer Science with a minor in Mathematics at Livingstone College. As a researcher I use machine learning and statistics to find out what is true. As an engineer I turn those findings into software people open."
+    "I study Computer Science with a minor in Mathematics at Livingstone College. My work spans machine learning, statistics and software: running studies, building apps and leading student communities.",
+    "I believe a good question is only worth something if the answer reaches the people living with the problem."
   ],
   "facts": [
     {
       "label": "Based in",
       "value": "Salisbury, North Carolina"
-    },
-    {
-      "label": "From",
-      "value": "Keta, Ghana"
     },
     {
       "label": "Research",
@@ -34,14 +30,6 @@
       ],
       "note": "Coursework: Discrete Mathematics, Calculus I, Data Structures and Analysis",
       "current": true
-    },
-    {
-      "meta": "[Years] · Accra, Ghana",
-      "school": "Central University, Ghana",
-      "degree": "Computer Science",
-      "badges": [],
-      "note": "Where I founded CIReN and wrote a reform proposal for the BSc Computer Science curriculum.",
-      "current": false
     }
   ],
   "experience": [

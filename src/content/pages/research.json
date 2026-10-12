@@ -1,7 +1,7 @@
 {
   "heroTitle": "My research",
-  "heroLead": "I research to discover what's true, then test whether it holds.",
-  "heroBody": "Applied machine learning and statistics, aimed at problems in healthcare, finance and climate risk. Most of it starts close to home.",
+  "heroLead": "What I've studied, and what I'm studying now.",
+  "heroBody": "Applied machine learning and statistics, aimed at problems in healthcare, finance and climate risk.",
   "areas": [
     {
       "title": "AI in Healthcare",
@@ -98,13 +98,13 @@
       ]
     },
     {
-      "title": "Predicting shoreline retreat on the Keta coast",
-      "anchor": "keta-shoreline",
+      "title": "Predicting shoreline retreat on vulnerable coastlines",
+      "anchor": "shoreline-retreat",
       "year": "Ongoing",
-      "where": "Keta, Ghana",
+      "where": "Coastal climate risk",
       "statusLabel": "In progress",
       "statusStyle": "soft",
-      "body": "My hometown has lost homes to the sea for decades. This project models shoreline position over time from Sentinel-2 and Landsat imagery, to give residents early warning and give policymakers evidence on sand collection and coastal vegetation loss.",
+      "body": "Coastal erosion is taking homes and livelihoods along low-lying coastlines. This project models shoreline position over time from Sentinel-2 and Landsat imagery, to give coastal communities early warning and give policymakers evidence on sand collection and coastal vegetation loss.",
       "tags": [
         "CoastSat",
         "Sentinel-2 / Landsat",
